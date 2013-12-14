@@ -89,7 +89,7 @@ class MoneyEmitter extends Emitter
 
   new: (amount, world, ...) =>
     super world, ...
-    world.entities\add MoneyTextEmitter "$#{amount}", world, ...
+    world.entities\add MoneyTextEmitter "+$#{amount}", world, ...
 
   count: 10
   make_particle: (x,y) =>
@@ -136,8 +136,10 @@ class Human extends Entity
   on_scare: (world) =>
     @is_scared = true
     center = Vec2d @center!
+    amt = 10
 
-    world.entities\add MoneyEmitter 10, world, unpack center
+    world.entities\add MoneyEmitter amt, world, unpack center
+    world.game\give_money amt
 
     if @has_key
       dir = Vec2d(world.player\center!) - center
@@ -151,7 +153,7 @@ class Human extends Entity
 class Player extends Entity
   is_player: true
 
-  hits: 2
+  hits: 1
   health: 1
 
   speed: 20
@@ -339,7 +341,7 @@ class World
   kill_player: =>
     @finish_seq = true
     @player\on_die @, ->
-      @seqs\add Sequence\after 0.2, ->
+      @seqs\add Sequence\after 0.5, ->
         @game\show_upgrade!
 
   collides: (entity) =>
@@ -347,12 +349,18 @@ class World
 
 class Game
   money: 0
+
   upgrades: {
     hands: 0
   }
 
   new: =>
     @inventory = {}
+    @money_this_round = 0
+
+  give_money: (amt) =>
+    @money_this_round += amt
+    @money += amt
 
   show_upgrade: =>
     dispatcher\insert World @
