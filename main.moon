@@ -3,6 +3,8 @@ require "lovekit.all"
 
 {graphics: g, :keyboard} = love
 
+import Upgrade from require "upgrade"
+
 class ScareParticle extends Box
   life: 1
   used: false -- has hit something
@@ -78,7 +80,7 @@ class Player extends Entity
     @hits > 0
 
 class World
-  new: (game) =>
+  new: (@game) =>
     @viewport = Viewport scale: 2
     @entities = DrawList!
     @seqs = DrawList!
@@ -97,7 +99,7 @@ class World
 
   draw: =>
     @viewport\apply!
-    g.print "Hits: #{@player.hits} - Ghost Bucks: #{@money}", 10, 10
+    g.print "Hits: #{@player.hits} - Ghost Bucks: #{@game.money}", 10, 10
 
     @entities\draw!
 
@@ -127,12 +129,17 @@ class World
 
 class Game
   money: 0
+
   new: =>
 
   on_show: (d) =>
-    print "pushing new world"
-    @world = World @
-    d\push @world
+    if @world
+      @world = nil
+      d\push Upgrade @
+    else
+      print "pushing new world"
+      @world = World @
+      d\push @world
 
 load_font = (img, chars)->
   font_image = imgfy img
