@@ -6,9 +6,7 @@ return {
   height = 20,
   tilewidth = 16,
   tileheight = 16,
-  properties = {
-    ["next_level"] = "maps.second"
-  },
+  properties = {},
   tilesets = {
     {
       name = "tiles",
@@ -60,37 +58,6 @@ return {
       }
     },
     {
-      type = "objectgroup",
-      name = "objects",
-      visible = true,
-      opacity = 1,
-      properties = {},
-      objects = {
-        {
-          name = "spawn",
-          type = "",
-          shape = "rectangle",
-          x = 58,
-          y = 259,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          name = "door",
-          type = "",
-          shape = "rectangle",
-          x = 248,
-          y = 9,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {}
-        }
-      }
-    },
-    {
       type = "tilelayer",
       name = "collide",
       x = 0,
@@ -125,6 +92,39 @@ return {
         4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4,
         4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4,
         4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4
+      }
+    },
+    {
+      type = "objectgroup",
+      name = "objects",
+      visible = true,
+      opacity = 1,
+      properties = {},
+      objects = {
+        {
+          name = "spawn",
+          type = "",
+          shape = "rectangle",
+          x = 58,
+          y = 259,
+          width = 0,
+          height = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          name = "door",
+          type = "",
+          shape = "rectangle",
+          x = 248,
+          y = 9,
+          width = 0,
+          height = 0,
+          visible = true,
+          properties = {
+            ["to"] = "maps.second"
+          }
+        }
       }
     }
   }

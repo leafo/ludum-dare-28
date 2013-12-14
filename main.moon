@@ -214,8 +214,9 @@ class World
       door_pos = Vec2d @door.x, @door.y
       door_dist = (pos - door_pos)\len!
 
-      if door_pos < 20
-        print "Enter the door!"
+      if door_dist < 20
+        dispatcher\replace World @game,
+          assert @door.properties.to, "door missing to"
 
   draw: =>
     @viewport\center_on @player

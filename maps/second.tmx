@@ -5,24 +5,19 @@
  </tileset>
  <layer name="Tile Layer 1" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjZmBgYCYBMyFhdD4TiWbB9DPiwKPmjZo3ah5+88jBhMzDJU8qHjVvcJpHTQwAsRIC/g==
+   eJzt1DsOACAIA1A+97+zuxGlUJ0cOvJSE9BFxH+osURQSzfJmhlrNiMXsTI9K54+8jpW5KHW6a2sbh1vt3esbtU9ZtwFcru2mGP8A+jc7QwytQNv
   </data>
  </layer>
- <layer name="collide" width="20" height="20" opacity="0.41">
+ <layer name="collide" width="20" height="20" opacity="0.46">
   <properties>
    <property name="hidden" value="true"/>
    <property name="solid" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYCANsBDApAJ8ekbNGzVv1Dz8cuRgQuZRC4yaNzjNoyYGAAHNATE=
+   eJxjYBgF1AYsRGJSzKJUDSnqkNXiU0+sWcTYT4rbiHEDNc2jxCxc5pED8PmVHLMGq3nEpLuhkH/Q9ZFbBuAyYzAAAMWOAQE=
   </data>
  </layer>
  <objectgroup name="objects" width="20" height="20">
-  <object name="spawn" x="58" y="259"/>
-  <object name="door" x="248" y="9">
-   <properties>
-    <property name="to" value="maps.second"/>
-   </properties>
-  </object>
+  <object name="spawn" x="136" y="168"/>
  </objectgroup>
 </map>
