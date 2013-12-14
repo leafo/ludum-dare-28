@@ -124,7 +124,7 @@ class Enemy extends Entity
         when "rand"
           Vec2d.from_radians rand 0, 2 * math.pi
         when "player"
-          towards_player = (Vec2d(@world.player\center!) - Vec2d(@center!))\normalized!
+          towards_player = @vector_to(@world.player)\normalized!
           towards_player\random_heading 30, random_normal!
         when "wait"
           dir = Vec2d!
@@ -177,6 +177,8 @@ class Player extends Entity
   is_player: true
 
   hits: 2
+  health: 1
+
   speed: 20
   max_speed: 100
 
@@ -201,10 +203,28 @@ class Player extends Entity
   on_die: (world, complete) =>
     world.entities\add FadeAway @, complete
 
+  on_hit: (entity, world) =>
+    return if @stunned
+    if entity.is_enemy
+      @vel = entity\vector_to(@)\normalized! * 150
+      @stunned = true
+      @seqs\add Sequence\after 0.1, ->
+        @stunned = false
+
+  draw: =>
+    if @stunned
+      super {200,200,200}
+    else
+      super {255,255,255}
+
   update: (dt, world) =>
     @seqs\update dt
     decel = @speed * 10 * dt
     @accel = movement_vector! * @speed
+
+    if @stunned
+      decel *= 4
+      @accel = Vec2d!
 
     if @accel\is_zero!
       dampen_vector @vel, decel
