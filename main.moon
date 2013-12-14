@@ -125,10 +125,10 @@ class World
   draw: =>
     @viewport\apply!
     g.print "Hits: #{@player.hits} - Ghost Bucks: #{@game.money}", 10, 10
-
     @entities\draw!
-
     @viewport\pop!
+
+    g.print love.timer.getFPS!, 10, 10
 
   update: (dt) =>
     @seqs\update dt
