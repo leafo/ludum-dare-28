@@ -27,6 +27,8 @@ class Key extends Entity
     super {255, 255, 100}
 
   update: (dt, world) =>
+    return false unless @on_ground
+
     dampen_vector @vel, dt * 200
 
     cx,cy = @fit_move @vel[1] * dt, @vel[2] * dt, world
@@ -36,7 +38,7 @@ class Key extends Entity
     if cy
       @vel[2] = -@vel[2]
 
-    @on_ground
+    true
 
 class FadeAway
   time: 0.8
@@ -318,6 +320,7 @@ class Game
       d\push Upgrade @
     else
       print "pushing new world"
+      @inventory = {}
       @world = World @
       d\push @world
 
