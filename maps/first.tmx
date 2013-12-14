@@ -24,7 +24,7 @@
     <property name="to" value="maps.second"/>
    </properties>
   </object>
-  <object name="human" x="280" y="176"/>
-  <object name="enemy" x="220" y="277"/>
+  <object name="human" x="157" y="252"/>
+  <object name="enemy" x="274" y="232"/>
  </objectgroup>
 </map>

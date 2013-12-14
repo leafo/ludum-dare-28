@@ -70,9 +70,8 @@ class FadeAway
     else
       true
 
-
 class MoneyEmitter extends Emitter
-  class P extends PixelParticle
+  class MoneyP extends PixelParticle
     size: 4
 
   count: 10
@@ -81,7 +80,7 @@ class MoneyEmitter extends Emitter
     dx = 5 * rand -0.5, 0.5
     dy = 5 * rand -0.5, 0.5
 
-    P x + dx, y + dy,
+    MoneyP x + dx, y + dy,
       Vec2d(0, -180)\random_heading(30) * power,
       Vec2d(0, 300)
 
@@ -122,6 +121,8 @@ class Human extends Entity
     center = Vec2d @center!
 
     world.entities\add MoneyEmitter world, unpack center
+    world.entities\add TextEmitter "Hello", world, unpack center
+
     if @has_key
       dir = Vec2d(world.player\center!) - center
       dir = dir\normalized!\random_heading!
@@ -238,8 +239,6 @@ class World
 
     @player = Player sx, sy
     @entities\add @player
-
-    -- @entities\add Key sx + 100, sy
 
     @hud = Hud @
     @collide = UniformGrid!
