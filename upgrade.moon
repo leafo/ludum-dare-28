@@ -17,7 +17,7 @@ class Upgrade
 
   draw: =>
     @viewport\apply!
-    g.print "Press enter to continue", 100, 100
+    g.print "Press enter to continue", 10, 10
     @viewport\pop!
 
 { :Upgrade }
