@@ -176,11 +176,20 @@ class Player extends Entity
 class World
   new: (@game) =>
     @viewport = Viewport scale: 2
+    sx, sy = 0, 0
+
+    @map = TileMap.from_tiled "maps.first", {
+      object: (o) ->
+        if o.name == "spawn"
+          sx = o.x
+          sy = o.y
+    }
+
     @entities = DrawList!
     @seqs = DrawList!
     @particles = DrawList!
 
-    @player = Player 10, 50
+    @player = Player sx, sy
 
     @entities\add @player
     @entities\add Enemy 100, 100
@@ -192,7 +201,6 @@ class World
 
     @collide = UniformGrid!
 
-    @map = TileMap.from_tiled "maps.first"
 
   on_key: (key) =>
     if key == " "
@@ -236,7 +244,7 @@ class World
           dispatcher\pop!
 
   collides: (entity) =>
-    false
+    @map\collides entity
 
 class Game
   money: 0

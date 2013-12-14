@@ -5,7 +5,19 @@
  </tileset>
  <layer name="Tile Layer 1" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjYmBgYKIyZqQSHjVv1LxR80bNGzWPuuZREwMA2cMB3Q==
+   eJxjZmBgYCYBMxHApJgFM48RBx41b9S8UfPwm0cOJmQeLnlS8ah5g9M8amIAqw4C/Q==
+  </data>
+ </layer>
+ <objectgroup name="objects" width="20" height="20">
+  <object name="spawn" x="58" y="259"/>
+ </objectgroup>
+ <layer name="collide" width="20" height="20" opacity="0.41">
+  <properties>
+   <property name="hidden" value="true"/>
+   <property name="solid" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYCANsBDApAJ8ekbNGzVv1Dz8cuRgQuZRC4yaNzjNoyYGAAHNATE=
   </data>
  </layer>
 </map>
