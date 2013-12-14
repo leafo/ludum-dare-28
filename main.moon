@@ -207,6 +207,7 @@ class Player extends Entity
     return if @stunned
     if entity.is_enemy
       @vel = entity\vector_to(@)\normalized! * 150
+      world.viewport\shake!
       @stunned = true
       @seqs\add Sequence\after 0.1, ->
         @stunned = false
@@ -252,7 +253,7 @@ class Player extends Entity
 
 class World
   new: (@game, map="maps.first") =>
-    @viewport = Viewport scale: 2
+    @viewport = EffectViewport scale: 2
     sx, sy = 0, 0
 
     @entities = DrawList!
@@ -331,6 +332,7 @@ class World
     g.print love.timer.getFPS!, 10, 10
 
   update: (dt) =>
+    @viewport\update dt
     @hud\update dt, @
     @particles\update dt
     @seqs\update dt
