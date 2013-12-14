@@ -166,7 +166,7 @@ class Player extends Entity
     world.entities\add radius
     @hits -= 1
 
-    @seqs\add Sequence\after 1, ->
+    @seqs\add Sequence\after 0.3, ->
       @scare_cooloff = false
 
   on_die: (world, complete) =>
@@ -236,6 +236,9 @@ class World
     @hud = Hud @
     @collide = UniformGrid!
 
+  on_show: =>
+    @game.inventory = {}
+
   on_key: (key) =>
     if key == " "
       @player\scare @
@@ -300,7 +303,7 @@ class World
       @finish_seq = true
       @player\on_die @, ->
         @seqs\add Sequence\after 0.2, ->
-          dispatcher\pop!
+          @game\show_upgrade!
 
   collides: (entity) =>
     @map\collides entity
@@ -314,15 +317,12 @@ class Game
   new: =>
     @inventory = {}
 
+  show_upgrade: =>
+    dispatcher\insert World @
+    dispatcher\replace Upgrade @game
+
   on_show: (d) =>
-    if @world
-      @world = nil
-      d\push Upgrade @
-    else
-      print "pushing new world"
-      @inventory = {}
-      @world = World @
-      d\push @world
+    d\push World @
 
 load_font = (img, chars)->
   font_image = imgfy img
@@ -337,4 +337,5 @@ love.load = ->
   g.setBackgroundColor 30,30,30
 
   export dispatcher = Dispatcher Game!
+  dispatcher.default_transition = FadeTransition
   dispatcher\bind love
