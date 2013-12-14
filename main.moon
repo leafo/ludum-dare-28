@@ -210,13 +210,29 @@ class World
       @player\scare @
 
     if key == "return"
+      return unless @door
+
       pos = Vec2d @player\center!
       door_pos = Vec2d @door.x, @door.y
       door_dist = (pos - door_pos)\len!
 
       if door_dist < 20
-        dispatcher\replace World @game,
-          assert @door.properties.to, "door missing to"
+        unless @enter_door!
+          print "you need key"
+
+  enter_door: =>
+    -- need a key
+    key = nil
+    for i, item in ipairs @game.inventory
+      print item.__class
+      if item.__class == Key
+        table.remove @game.inventory, i
+        key = item
+        break
+
+    return false unless key
+    dispatcher\replace World @game,
+      assert @door.properties.to, "door missing to"
 
   draw: =>
     @viewport\center_on @player
