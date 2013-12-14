@@ -41,4 +41,4 @@ class Hud
     { :player, :game } = @world
     @display_money = ez_approach @display_money, game.money, dt
 
-{ :Hud }
+{ :Hud, :ez_approach }

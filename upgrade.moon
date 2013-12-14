@@ -1,6 +1,8 @@
 
 {graphics: g, :keyboard} = love
 
+import ez_approach from require "hud"
+
 -- a piece of text that knows its size
 class Label extends Box
   new: (text, @x=0, @y=0) =>
@@ -70,6 +72,7 @@ class Upgrade
     @entities = DrawList!
     @seqs = DrawList!
 
+    @display_money = @game.money
     @money_last_round = @game.money_this_round
 
     @entities\add with VList @viewport\right(10), 10, {
@@ -85,14 +88,34 @@ class Upgrade
     }
       .yalign = "bottom"
 
+    @entities\add with VList @viewport\right(10), @viewport\bottom(10), {
+      Label -> "$#{math.floor @display_money} GB"
+    }
+      .yalign = "bottom"
+      .xalign = "right"
+
   update: (dt) =>
     @seqs\update dt
     @entities\update dt, @
+    @display_money = ez_approach @display_money, @game.money, dt
 
   on_key: (key) =>
-    if key == "return"
-      @game\on_new_round!
-      dispatcher\pop!
+    try_upgrade = (name) ->
+      price =  @game\upgrade_price name
+      if @game.money > price
+        @game.money -= price
+        @game.upgrades[name] += 1
+      else
+        sfx\play "buzz"
+
+    switch key
+      when "return"
+        @game\on_new_round!
+        dispatcher\pop!
+      when "1" -- buy hit
+        try_upgrade "hit"
+      when "2" -- buy hp
+        try_upgrade "hp"
 
   draw: =>
     @viewport\apply!

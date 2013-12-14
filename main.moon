@@ -64,7 +64,7 @@ class FadeAway
 
   update: (dt) =>
     @life -= dt
-    dampen_vector @entity.vel, dt * 300
+    dampen_vector @entity.vel, dt * 400
     @entity\move unpack @entity.vel * dt
 
     if @life <= 0
@@ -348,13 +348,15 @@ class World
     @map\collides entity
 
 class Game
-  money: 0
-
-  upgrades: {
-    hands: 0
-  }
+  money: 100
 
   new: =>
+    @upgrades = {
+      hands: 0
+      hit: 0
+      hp: 0
+    }
+
     @on_new_round!
 
   on_new_round: =>
@@ -365,13 +367,16 @@ class Game
     @money_this_round += amt
     @money += amt
 
+  upgrade_price: (name) =>
+    10 + 5 * @upgrades[name]
+
   show_upgrade: =>
     dispatcher\insert World @
     dispatcher\replace Upgrade @
 
   on_show: (d) =>
-    d\push World @
-    -- d\push Upgrade @
+    --d\push World @
+    d\push Upgrade @
 
 load_font = (img, chars)->
   font_image = imgfy img
@@ -385,6 +390,13 @@ love.load = ->
   g.setFont fonts.default
   g.setBackgroundColor 30,30,30
 
+  export sfx = {
+    play: (name) =>
+      print "PLAYING SOUND: #{name}"
+  }
+
   export dispatcher = Dispatcher Game!
   dispatcher.default_transition = FadeTransition
   dispatcher\bind love
+
+
