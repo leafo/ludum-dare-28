@@ -18,13 +18,19 @@ class Label extends Box
 
 class VList
   padding: 5
+  xalign: "left"
 
   new: (@x, @y, @items) =>
 
   draw: =>
     {:x, :y} = @
+
     for item in *@items
-      item.x = x
+      item.x = if @xalign == "right"
+        x - item.w
+      else
+        x
+
       item.y = y
       y += @padding + item.h
       item\draw!
@@ -42,11 +48,12 @@ class Upgrade
 
     @money_last_round = @game.money_this_round
 
-    @entities\add VList 10, 10, {
+    @entities\add with VList @viewport\right(10), 10, {
       Label "Nice scare!"
       Label "You earned $#{@money_last_round} last round"
       Label "Press enter to continue"
     }
+      .xalign = "right"
 
   update: (dt) =>
     @seqs\update dt
