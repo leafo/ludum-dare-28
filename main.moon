@@ -5,6 +5,7 @@ require "lovekit.reloader"
 {graphics: g, :keyboard} = love
 
 import Upgrade from require "upgrade"
+import Hud from require "hud"
 
 class Key extends Entity
   w: 5
@@ -187,6 +188,8 @@ class World
 
     @entities\add Key 60, 60
 
+    @hud = Hud @
+
     @collide = UniformGrid!
 
   on_key: (key) =>
@@ -195,14 +198,16 @@ class World
 
   draw: =>
     @viewport\apply!
-    g.print "Hits: #{@player.hits} - Ghost Bucks: #{@game.money}", 10, 10
     @entities\draw!
+    @hud\draw!
+
     @particles\draw!
     @viewport\pop!
 
     g.print love.timer.getFPS!, 10, 10
 
   update: (dt) =>
+    @hud\update dt, @
     @particles\update dt
     @seqs\update dt
     @entities\update dt, @
