@@ -11,8 +11,14 @@ class Key extends Entity
   w: 5
   h: 5
   on_ground: true
+  collectable: false
+
+  new: (x,y, vel) =>
+    super x, y
+    @vel = vel
 
   on_hit: (entity, world) =>
+    return if @vel\len! > 10
     return unless entity.is_player
     @on_ground = false
     table.insert world.game.inventory, @
@@ -20,7 +26,16 @@ class Key extends Entity
   draw: =>
     super {255, 255, 100}
 
-  update: =>
+  update: (dt, world) =>
+    dampen_vector @vel, dt * 200
+
+    cx,cy = @fit_move @vel[1] * dt, @vel[2] * dt, world
+
+    if cx
+      @vel[1] = -@vel[1]
+    if cy
+      @vel[2] = -@vel[2]
+
     @on_ground
 
 class FadeAway
@@ -83,11 +98,9 @@ class ScareParticle extends Box
 
   on_hit: (entity, world) =>
     return if @used
-    return unless entity.is_human
-
-    print "Hitting human! give me ghost bucks"
-    world.entities\add MoneyEmitter world, entity\center!
-
+    return unless entity.on_scare
+    return if entity.is_scared
+    entity\on_scare world
     @used = true
 
 class Enemy extends Entity
@@ -106,18 +119,33 @@ class Enemy extends Entity
 
 class Human extends Entity
   is_human: true
+  is_scared: false
+  has_key: true
 
   draw: =>
-    super {100,255,100}
+    if @is_scared
+      super {100,255,255}
+    else
+      super {100,255,100}
+
+  on_scare: (world) =>
+    @is_scared = true
+    center = Vec2d @center!
+
+    world.entities\add MoneyEmitter world, unpack center
+    if @has_key
+      dir = Vec2d(world.player\center!) - center
+      dir = dir\normalized!\random_heading!
+      world.entities\add Key @x, @y, dir * 150 * rand(1, 1.3)
 
   update: (...) =>
-    super
+    super ...
     true
 
 class Player extends Entity
   is_player: true
 
-  hits: 1
+  hits: 2
   speed: 20
   max_speed: 100
 

@@ -129,7 +129,7 @@ return {
           name = "human",
           type = "",
           shape = "rectangle",
-          x = 291,
+          x = 280,
           y = 176,
           width = 0,
           height = 0,
