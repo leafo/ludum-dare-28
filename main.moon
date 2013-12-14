@@ -6,11 +6,26 @@ require "lovekit.reloader"
 
 import Upgrade from require "upgrade"
 
+class Key extends Entity
+  w: 5
+  h: 5
+  on_ground: true
+
+  on_hit: (entity, world) =>
+    return unless entity.is_player
+    @on_ground = false
+    table.insert world.player.inventory, @
+
+  draw: =>
+    super {255, 255, 100}
+
+  update: =>
+    @on_ground
+
 class FadeAway
   time: 0.8
   new: (@entity, @done_fn) =>
     @life = @time
-    print "start_fade"
 
   draw: =>
     p = smoothstep 0,1, 1 - math.max @life/@time, 0
@@ -47,7 +62,9 @@ class MoneyEmitter extends Emitter
     dx = 5 * rand -0.5, 0.5
     dy = 5 * rand -0.5, 0.5
 
-    P x + dx, y + dy, (Vec2d(0, -180) * power)\random_heading(30), Vec2d(0, 300)
+    P x + dx, y + dy,
+      Vec2d(0, -180)\random_heading(30) * power,
+      Vec2d(0, 300)
 
 class ScareParticle extends Box
   life: 1
@@ -97,11 +114,15 @@ class Human extends Entity
     true
 
 class Player extends Entity
+  is_player: true
+
   hits: 1
   speed: 20
   max_speed: 100
 
   new: (x,y) =>
+    @inventory = {}
+
     @seqs = DrawList!
     @accel = Vec2d 0, 0
     super x,y
@@ -164,6 +185,8 @@ class World
     @entities\add Enemy 100, 100
     @entities\add Human 200, 100
 
+    @entities\add Key 60, 60
+
     @collide = UniformGrid!
 
   on_key: (key) =>
@@ -207,6 +230,9 @@ class World
 
 class Game
   money: 0
+  upgrades: {
+    hands: 0
+  }
 
   new: =>
 
