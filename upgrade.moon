@@ -19,11 +19,24 @@ class Label extends Box
 class VList
   padding: 5
   xalign: "left"
+  yalign: "top"
 
   new: (@x, @y, @items) =>
 
   draw: =>
     {:x, :y} = @
+
+    dy = if @yalign == "bottom"
+      total_height = 0
+      for item in *@items
+        total_height += item.h
+
+      if total_height > 0
+        total_height += @padding * #@items
+
+      -total_height
+    else
+      0
 
     for item in *@items
       item.x = if @xalign == "right"
@@ -31,7 +44,7 @@ class VList
       else
         x
 
-      item.y = y
+      item.y = y + dy
       y += @padding + item.h
       item\draw!
 
@@ -54,6 +67,12 @@ class Upgrade
       Label "Press enter to continue"
     }
       .xalign = "right"
+
+    @entities\add with VList 10, @viewport\bottom(10), {
+      Label "Cool thing"
+      Label "The cool is near"
+    }
+      .yalign = "bottom"
 
   update: (dt) =>
     @seqs\update dt
