@@ -52,10 +52,12 @@ class Human extends Entity
 
 class Player extends Entity
   hits: 1
-  speed: 100
+  speed: 20
+  max_speed: 100
 
   new: (x,y) =>
     @seqs = DrawList!
+    @accel = Vec2d 0, 0
     super x,y
 
   scare: (world) =>
@@ -75,8 +77,31 @@ class Player extends Entity
 
   update: (dt, world) =>
     @seqs\update dt
-    @velocity = movement_vector! * @speed
-    super dt, world
+    decel = @speed * 10 * dt
+    @accel = movement_vector! * @speed
+
+    if @accel\is_zero!
+      dampen_vector @vel, decel
+    else
+      if @accel[1] == 0
+        -- not moving in x, shrink it
+        @vel[1] = dampen @vel[1], decel
+        nil
+      else
+        if (@accel[1] < 0) == (@vel[1] > 0)
+          @accel[1] *= 2
+
+      if @accel[2] == 0
+        -- not moving in y, shrink it
+        @vel[2] = dampen @vel[2], decel
+      else
+        if (@accel[2] < 0) == (@vel[2] > 0)
+          @accel[2] *= 2
+
+    @vel\adjust unpack @accel * dt * @speed
+    @vel\cap @max_speed
+
+    @fit_move @vel[1] * dt, @vel[2] * dt, world
     @hits > 0
 
 class World
