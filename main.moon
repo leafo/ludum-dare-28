@@ -176,6 +176,10 @@ class World
     @viewport = Viewport scale: 2
     sx, sy = 0, 0
 
+    @entities = DrawList!
+    @seqs = DrawList!
+    @particles = DrawList!
+
     @map = TileMap.from_tiled map, {
       map_properties: (data) ->
         @next_level = data.next_level
@@ -187,22 +191,19 @@ class World
             sy = o.y
           when "door"
             @door = o
+          when "human"
+            @entities\add Human o.x, o.y
+          when "enemy"
+            @entities\add Enemy o.x, o.y
     }
 
-    @entities = DrawList!
-    @seqs = DrawList!
-    @particles = DrawList!
 
     @player = Player sx, sy
-
     @entities\add @player
-    @entities\add Enemy 100, 100
-    @entities\add Human 200, 100
 
-    @entities\add Key sx + 100, sy
+    -- @entities\add Key sx + 100, sy
 
     @hud = Hud @
-
     @collide = UniformGrid!
 
   on_key: (key) =>

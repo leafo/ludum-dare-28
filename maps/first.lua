@@ -124,6 +124,28 @@ return {
           properties = {
             ["to"] = "maps.second"
           }
+        },
+        {
+          name = "human",
+          type = "",
+          shape = "rectangle",
+          x = 291,
+          y = 176,
+          width = 0,
+          height = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          name = "enemy",
+          type = "",
+          shape = "rectangle",
+          x = 220,
+          y = 277,
+          width = 0,
+          height = 0,
+          visible = true,
+          properties = {}
         }
       }
     }
