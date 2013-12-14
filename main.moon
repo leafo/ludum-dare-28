@@ -15,7 +15,7 @@ class Key extends Entity
   on_hit: (entity, world) =>
     return unless entity.is_player
     @on_ground = false
-    table.insert world.player.inventory, @
+    table.insert world.game.inventory, @
 
   draw: =>
     super {255, 255, 100}
@@ -122,8 +122,6 @@ class Player extends Entity
   max_speed: 100
 
   new: (x,y) =>
-    @inventory = {}
-
     @seqs = DrawList!
     @accel = Vec2d 0, 0
     super x,y
@@ -174,15 +172,21 @@ class Player extends Entity
     @hits > 0
 
 class World
-  new: (@game) =>
+  new: (@game, map="maps.first") =>
     @viewport = Viewport scale: 2
     sx, sy = 0, 0
 
-    @map = TileMap.from_tiled "maps.first", {
+    @map = TileMap.from_tiled map, {
+      map_properties: (data) ->
+        @next_level = data.next_level
+
       object: (o) ->
-        if o.name == "spawn"
-          sx = o.x
-          sy = o.y
+        switch o.name
+          when "spawn"
+            sx = o.x
+            sy = o.y
+          when "door"
+            @door = o
     }
 
     @entities = DrawList!
@@ -195,16 +199,23 @@ class World
     @entities\add Enemy 100, 100
     @entities\add Human 200, 100
 
-    @entities\add Key 60, 60
+    @entities\add Key sx + 100, sy
 
     @hud = Hud @
 
     @collide = UniformGrid!
 
-
   on_key: (key) =>
     if key == " "
       @player\scare @
+
+    if key == "return"
+      pos = Vec2d @player\center!
+      door_pos = Vec2d @door.x, @door.y
+      door_dist = (pos - door_pos)\len!
+
+      if door_pos < 20
+        print "Enter the door!"
 
   draw: =>
     @viewport\center_on @player
@@ -253,6 +264,7 @@ class Game
   }
 
   new: =>
+    @inventory = {}
 
   on_show: (d) =>
     if @world

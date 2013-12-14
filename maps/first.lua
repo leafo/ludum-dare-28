@@ -6,7 +6,9 @@ return {
   height = 20,
   tilewidth = 16,
   tileheight = 16,
-  properties = {},
+  properties = {
+    ["next_level"] = "maps.second"
+  },
   tilesets = {
     {
       name = "tiles",
@@ -35,7 +37,7 @@ return {
       properties = {},
       encoding = "lua",
       data = {
-        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2,
+        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 3, 2, 2, 2, 2,
         3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 1, 1, 1, 1, 1, 1, 2,
         3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 1, 1, 1, 1, 1, 1, 2,
         3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 1, 1, 1, 1, 1, 1, 2,
@@ -70,6 +72,17 @@ return {
           shape = "rectangle",
           x = 58,
           y = 259,
+          width = 0,
+          height = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          name = "door",
+          type = "",
+          shape = "rectangle",
+          x = 248,
+          y = 9,
           width = 0,
           height = 0,
           visible = true,

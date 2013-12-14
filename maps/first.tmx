@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="20" height="20" tilewidth="16" tileheight="16">
+ <properties>
+  <property name="next_level" value="maps.second"/>
+ </properties>
  <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16">
   <image source="../images/tiles.png" width="256" height="256"/>
  </tileset>
  <layer name="Tile Layer 1" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjZmBgYCYBMxHApJgFM48RBx41b9S8UfPwm0cOJmQeLnlS8ah5g9M8amIAqw4C/Q==
+   eJxjZmBgYCYBMyFhdD4TiWbB9DPiwKPmjZo3ah5+88jBhMzDJU8qHjVvcJpHTQwAsRIC/g==
   </data>
  </layer>
  <objectgroup name="objects" width="20" height="20">
   <object name="spawn" x="58" y="259"/>
+  <object name="door" x="248" y="9"/>
  </objectgroup>
  <layer name="collide" width="20" height="20" opacity="0.41">
   <properties>

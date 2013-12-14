@@ -20,9 +20,9 @@ class Hud
 
     g.print "Hits: #{player.hits} - Ghost Bucks: #{game.money}", v\left(10), v\top(10)
 
-    if next player.inventory
+    if next game.inventory
       list = PaddedList v\right(20), v\top(10)
-      for item in *player.inventory
+      for item in *game.inventory
         list\draw_next item
 
     g.pop!
