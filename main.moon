@@ -30,7 +30,7 @@ class FadeAway
   update: (dt) =>
     @life -= dt
     if @life <= 0
-      done_fn and done_fn @
+      @done_fn and @done_fn @
       false
     else
       true
@@ -181,7 +181,7 @@ class World
     -- check if player is done
     if not @player.alive and not @finish_seq
       @finish_seq = true
-      @player\on_die @, =>
+      @player\on_die @, ->
         @seqs\add Sequence\after 0.2, ->
           dispatcher\pop!
 
