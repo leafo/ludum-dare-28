@@ -49,7 +49,7 @@ class Human extends Entity
     true
 
 class Player extends Entity
-  hits: 0
+  hits: 1
   speed: 100
 
   new: (x,y) =>
@@ -58,12 +58,15 @@ class Player extends Entity
 
   scare: (world) =>
     return if @scare_cooloff
+    reutrn unless @hits > 0
 
     @scare_cooloff = true
 
     print "scare someone"
+
     radius = ScareParticle @, @scale(2, 2, true)\unpack!
     world.entities\add radius
+    @hits -= 1
 
     @seqs\add Sequence\after 1, ->
       @scare_cooloff = false
@@ -72,20 +75,20 @@ class Player extends Entity
     @seqs\update dt
     @velocity = movement_vector! * @speed
     super dt, world
-    true
+    @hits > 0
 
-class Game
-  money: 0
-
-  new: =>
+class World
+  new: (game) =>
     @viewport = Viewport scale: 2
     @entities = DrawList!
+    @seqs = DrawList!
+
     @player = Player 10, 50
 
     @entities\add @player
     @entities\add Enemy 100, 100
     @entities\add Human 200, 100
-    
+
     @collide = UniformGrid!
 
   on_key: (key) =>
@@ -94,14 +97,16 @@ class Game
 
   draw: =>
     @viewport\apply!
-    g.print "Hits: 0 - Ghost Bucks: #{@money}", 10, 10
+    g.print "Hits: #{@player.hits} - Ghost Bucks: #{@money}", 10, 10
 
     @entities\draw!
 
     @viewport\pop!
 
   update: (dt) =>
+    @seqs\update dt
     @entities\update dt, @
+
     @collide\clear!
 
     for e in *@entities
@@ -112,8 +117,22 @@ class Game
       for touching in *@collide\get_touching e
         e\on_hit touching
 
-  collides: =>
+    -- check if player is done
+    if @player.hits == 0
+      @seqs\add Sequence\after 1, ->
+        dispatcher\pop!
+
+  collides: (entity) =>
     false
+
+class Game
+  money: 0
+  new: =>
+
+  on_show: (d) =>
+    print "pushing new world"
+    @world = World @
+    d\push @world
 
 load_font = (img, chars)->
   font_image = imgfy img
