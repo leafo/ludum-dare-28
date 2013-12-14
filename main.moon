@@ -192,12 +192,17 @@ class World
 
     @collide = UniformGrid!
 
+    @map = TileMap.from_tiled "maps.first"
+
   on_key: (key) =>
     if key == " "
       @player\scare @
 
   draw: =>
+    @viewport\center_on @player
     @viewport\apply!
+    @map\draw @viewport
+
     @entities\draw!
     @hud\draw!
 
