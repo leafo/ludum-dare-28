@@ -1,5 +1,6 @@
 
 require "lovekit.all"
+require "lovekit.reloader"
 
 {graphics: g, :keyboard} = love
 
@@ -35,6 +36,19 @@ class FadeAway
     else
       true
 
+
+class MoneyEmitter extends Emitter
+  class P extends PixelParticle
+    size: 4
+
+  count: 10
+  make_particle: (x,y) =>
+    power = rand 0.8, 1.1
+    dx = 5 * rand -0.5, 0.5
+    dy = 5 * rand -0.5, 0.5
+
+    P x + dx, y + dy, (Vec2d(0, -180) * power)\random_heading(30), Vec2d(0, 300)
+
 class ScareParticle extends Box
   life: 1
   used: false -- has hit something
@@ -49,11 +63,13 @@ class ScareParticle extends Box
     @life -= dt
     @life > 0
 
-  on_hit: (entity) =>
+  on_hit: (entity, world) =>
     return if @used
     return unless entity.is_human
 
     print "Hitting human! give me ghost bucks"
+    world.entities\add MoneyEmitter world, entity\center!
+
     @used = true
 
 class Enemy extends Entity
@@ -95,8 +111,6 @@ class Player extends Entity
     reutrn unless @hits > 0
 
     @scare_cooloff = true
-
-    print "scare someone"
 
     radius = ScareParticle @, @scale(2, 2, true)\unpack!
     world.entities\add radius
@@ -142,6 +156,7 @@ class World
     @viewport = Viewport scale: 2
     @entities = DrawList!
     @seqs = DrawList!
+    @particles = DrawList!
 
     @player = Player 10, 50
 
@@ -159,11 +174,13 @@ class World
     @viewport\apply!
     g.print "Hits: #{@player.hits} - Ghost Bucks: #{@game.money}", 10, 10
     @entities\draw!
+    @particles\draw!
     @viewport\pop!
 
     g.print love.timer.getFPS!, 10, 10
 
   update: (dt) =>
+    @particles\update dt
     @seqs\update dt
     @entities\update dt, @
 
@@ -176,7 +193,7 @@ class World
     for e in *@entities
       continue unless e.on_hit
       for touching in *@collide\get_touching e
-        e\on_hit touching
+        e\on_hit touching, @
 
     -- check if player is done
     if not @player.alive and not @finish_seq
