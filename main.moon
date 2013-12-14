@@ -227,7 +227,13 @@ class Player extends Entity
     @vel\adjust unpack @accel * dt * @speed
     @vel\cap @max_speed
 
-    @fit_move @vel[1] * dt, @vel[2] * dt, world
+    cx, cy = @fit_move @vel[1] * dt, @vel[2] * dt, world
+
+    if cx
+      @vel[1] = -@vel[1]/2
+    if cy
+      @vel[2] = -@vel[2]/2
+
     @hits > 0 and @health > 0
 
 class World
