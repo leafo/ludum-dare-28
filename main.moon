@@ -6,15 +6,25 @@ require "lovekit.all"
 import Upgrade from require "upgrade"
 
 class FadeAway
-  time: 0.5
+  time: 0.8
   new: (@entity, @done_fn) =>
     @life = @time
     print "start_fade"
 
   draw: =>
-    alpha = math.max @life/@time, 0
-    COLOR\pusha smoothstep(0,1, alpha) * 255
+    p = smoothstep 0,1, 1 - math.max @life/@time, 0
+    drift = p * 10
+    sway = (p + 0.5) * 5 * math.sin (@time - @life) * 10
+
+    COLOR\pusha (1 - p) * 255
+    x, y = @entity\center!
+    g.push!
+    g.translate x + sway, y - drift
+    g.scale p + 1, p + 1
+    g.translate -x,-y
     @entity\draw!
+    g.pop!
+
     COLOR\pop!
 
   update: (dt) =>
@@ -95,8 +105,8 @@ class Player extends Entity
     @seqs\add Sequence\after 1, ->
       @scare_cooloff = false
 
-  on_die: (world) =>
-    world.entities\add FadeAway @
+  on_die: (world, complete) =>
+    world.entities\add FadeAway @, complete
 
   update: (dt, world) =>
     @seqs\update dt
@@ -171,9 +181,9 @@ class World
     -- check if player is done
     if not @player.alive and not @finish_seq
       @finish_seq = true
-      @player\on_die @
-      @seqs\add Sequence\after 1, ->
-        dispatcher\pop!
+      @player\on_die @, =>
+        @seqs\add Sequence\after 0.2, ->
+          dispatcher\pop!
 
   collides: (entity) =>
     false
