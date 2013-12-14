@@ -74,6 +74,20 @@ class MoneyEmitter extends Emitter
   class MoneyP extends PixelParticle
     size: 4
 
+  class MoneyTextEmitter extends TextEmitter
+    speed: 200
+
+    make_particle: (...) =>
+      with super ...
+        .vel = Vec2d(0,-1)\random_heading(30) * @speed
+        .accel = Vec2d(0, @speed*2)
+        .dspin = rand -2,2
+        .dscale = rand 1.1, 1.2
+
+  new: (amount, world, ...) =>
+    super world, ...
+    world.entities\add MoneyTextEmitter "$#{amount}", world, ...
+
   count: 10
   make_particle: (x,y) =>
     power = rand 0.8, 1.1
@@ -120,8 +134,7 @@ class Human extends Entity
     @is_scared = true
     center = Vec2d @center!
 
-    world.entities\add MoneyEmitter world, unpack center
-    world.entities\add TextEmitter "Hello", world, unpack center
+    world.entities\add MoneyEmitter 10, world, unpack center
 
     if @has_key
       dir = Vec2d(world.player\center!) - center
