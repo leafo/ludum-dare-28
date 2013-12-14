@@ -5,6 +5,26 @@ require "lovekit.all"
 
 import Upgrade from require "upgrade"
 
+class FadeAway
+  time: 0.5
+  new: (@entity, @done_fn) =>
+    @life = @time
+    print "start_fade"
+
+  draw: =>
+    alpha = math.max @life/@time, 0
+    COLOR\pusha smoothstep(0,1, alpha) * 255
+    @entity\draw!
+    COLOR\pop!
+
+  update: (dt) =>
+    @life -= dt
+    if @life <= 0
+      done_fn and done_fn @
+      false
+    else
+      true
+
 class ScareParticle extends Box
   life: 1
   used: false -- has hit something
@@ -13,7 +33,7 @@ class ScareParticle extends Box
     super ...
 
   draw: =>
-    super {255,255, 0}
+    super {255,255, 0, 128}
 
   update: (dt, world) =>
     @life -= dt
@@ -74,6 +94,9 @@ class Player extends Entity
 
     @seqs\add Sequence\after 1, ->
       @scare_cooloff = false
+
+  on_die: (world) =>
+    world.entities\add FadeAway @
 
   update: (dt, world) =>
     @seqs\update dt
@@ -137,6 +160,7 @@ class World
     @collide\clear!
 
     for e in *@entities
+      continue unless e.w -- probably a rect
       @collide\add e
 
     for e in *@entities
@@ -145,7 +169,9 @@ class World
         e\on_hit touching
 
     -- check if player is done
-    if @player.hits == 0
+    if not @player.alive and not @finish_seq
+      @finish_seq = true
+      @player\on_die @
       @seqs\add Sequence\after 1, ->
         dispatcher\pop!
 
