@@ -355,6 +355,9 @@ class Game
   }
 
   new: =>
+    @on_new_round!
+
+  on_new_round: =>
     @inventory = {}
     @money_this_round = 0
 
@@ -364,10 +367,11 @@ class Game
 
   show_upgrade: =>
     dispatcher\insert World @
-    dispatcher\replace Upgrade @game
+    dispatcher\replace Upgrade @
 
   on_show: (d) =>
     d\push World @
+    -- d\push Upgrade @
 
 load_font = (img, chars)->
   font_image = imgfy img
