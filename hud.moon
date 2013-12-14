@@ -18,7 +18,7 @@ class Hud
     g.push!
     g.translate v.x, v.y
 
-    g.print "Hits: #{player.hits} - Ghost Bucks: #{game.money}", v\left(10), v\top(10)
+    g.print "Hits: #{player.hits} Health: #{player.health} Ghost Bucks: #{game.money}", v\left(10), v\top(10)
 
     if next game.inventory
       list = PaddedList v\right(20), v\top(10)

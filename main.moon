@@ -64,6 +64,9 @@ class FadeAway
 
   update: (dt) =>
     @life -= dt
+    dampen_vector @entity.vel, dt * 300
+    @entity\move unpack @entity.vel * dt
+
     if @life <= 0
       @done_fn and @done_fn @
       false
@@ -80,7 +83,7 @@ class MoneyEmitter extends Emitter
     make_particle: (...) =>
       with super ...
         .vel = Vec2d(0,-1)\random_heading(30) * @speed
-        .accel = Vec2d(0, @speed*2)
+        .accel = Vec2d 0, @speed*2
         .dspin = rand -2,2
         .dscale = rand 1.1, 1.2
 
@@ -178,6 +181,10 @@ class Player extends Entity
   on_hit: (entity, world) =>
     return if @stunned
     if entity.is_enemy
+      @health -= 1
+      if @health <= 0
+        world\kill_player!
+
       @vel = entity\vector_to(@)\normalized! * 150
       world.viewport\shake!
       @stunned = true
@@ -221,7 +228,7 @@ class Player extends Entity
     @vel\cap @max_speed
 
     @fit_move @vel[1] * dt, @vel[2] * dt, world
-    @hits > 0
+    @hits > 0 and @health > 0
 
 class World
   new: (@game, map="maps.first") =>
@@ -289,7 +296,7 @@ class World
       assert @door.properties.to, "door missing to"
 
   draw: =>
-    @viewport\center_on @player
+    @viewport\center_on @player if @player.alive
     @viewport\apply!
     @map\draw @viewport
 
@@ -321,10 +328,13 @@ class World
 
     -- check if player is done
     if not @player.alive and not @finish_seq
-      @finish_seq = true
-      @player\on_die @, ->
-        @seqs\add Sequence\after 0.2, ->
-          @game\show_upgrade!
+      @kill_player!
+
+  kill_player: =>
+    @finish_seq = true
+    @player\on_die @, ->
+      @seqs\add Sequence\after 0.2, ->
+        @game\show_upgrade!
 
   collides: (entity) =>
     @map\collides entity
