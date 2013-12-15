@@ -216,8 +216,8 @@ class Human extends Entity
   ox: 7
   oy: 15
 
-  new: (...) =>
-    super ...
+  new: (x, y) =>
+    @move_center x, y
     @anim = @sprite\seq {"0,192,32,48"}, 0
 
   draw: =>
@@ -241,8 +241,7 @@ class Human extends Entity
       dir = dir\normalized!\random_heading!
       world.entities\add Key @x, @y, dir * 150 * rand(1, 1.3)
 
-  update: (...) =>
-    super ...
+  update: (dt) =>
     true
 
 class Player extends Entity
@@ -387,7 +386,8 @@ class World
     }
 
 
-    @player = Player sx, sy
+    @player = Player!
+    @player\move_center sx, sy
 
     @entities\add @player
 

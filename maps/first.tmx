@@ -1,30 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="20" height="20" tilewidth="16" tileheight="16">
+<map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="16" tileheight="16">
  <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16">
   <image source="../images/tiles.png" width="256" height="512"/>
  </tileset>
- <layer name="Tile Layer 1" width="20" height="20">
+ <layer name="ground" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJxjZmBgYCYSKwKxEhAr48HEmgXCoUBsBMTGeDCp5jkBsTMeTKp5YUAcgQePmje8zSMmzSNjQuYRk+aRcRAR5hFK88g4iQjzCPmBFDxq3vA2DwBOMFv6
+   eJxjYmBgYBrFo3iEYlYSsCIQKwGxMgHMTSP7Q4HYCIiN8WApIJamof1OQOyMB2sBcQwN7Q8D4gg8OHrU/lH7R+0n2n5iyzQYprb9xJRpyDiIBvYTKtOQcRIN7CcUpqTgUftH7R+1n3j7S4G4DIhnUglXA3ENCfa3AnEbEK+kIu4hwf5RPLIxAM5biOQ=
   </data>
  </layer>
- <layer name="collide" width="20" height="20" visible="0" opacity="0.41">
+ <layer name="shadows" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjALigAOU5sGB9WlsPy8QywOxDBYsQGO7YfbzkSFHTbsH0v6B9v9Itp+QHaP2k28/rvIMHdPKflxlGjZsT2X7qRVvo/aP2k+u/fwMxOdBXFiBTPsNGIjPe+TmzVEwCgYjAAButAoj
+  </data>
+ </layer>
+ <layer name="decor" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztzScOgEAABVFWAve/El3TNdVTDZNguMCy5k/y9HieUkoppZSbIsRIkGLGghUZchQW/yUq1Ghw4sKNFh16i/9vvnkFCM1PU+W8ASMmR/8NOw5Hf6XUvz2pPhbg
+  </data>
+ </layer>
+ <layer name="collide" width="32" height="32" opacity="0.41">
   <properties>
    <property name="hidden" value="true"/>
    <property name="solid" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYBhegIUAJsc8cuRGzRs1j17mEUrzxOYBFjSaUjBq3uA1j1oYAIl+ARk=
+   eJztzTEKADAIBEGL/P/N6a2UaBGYhatEJkKSap3Ctv2XO5/P5+efzjb8qfh8fv9nctIvXaj5ASk=
   </data>
  </layer>
- <objectgroup name="objects" width="20" height="20">
-  <object name="spawn" x="58" y="259"/>
-  <object name="door" x="108" y="201">
+ <objectgroup name="objects" width="32" height="32">
+  <object name="spawn" x="73" y="382"/>
+  <object name="door" x="120" y="308">
    <properties>
     <property name="to" value="maps.second"/>
    </properties>
   </object>
-  <object name="human" x="157" y="252"/>
-  <object name="enemy" x="274" y="232"/>
+  <object name="human" x="280" y="152"/>
+  <object name="enemy" x="274" y="328"/>
  </objectgroup>
 </map>
