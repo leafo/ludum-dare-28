@@ -7,6 +7,7 @@ require "lovekit.reloader"
 import Upgrade from require "upgrade"
 import Hud from require "hud"
 import Enemy from require "enemy"
+import Title from require "title"
 
 paused = false
 export show_boxes = false
@@ -491,7 +492,7 @@ class World
   collides: (entity) =>
     @map\collides entity
 
-class Game
+_G.Game = class Game
   money: 0
 
   new: =>
@@ -523,8 +524,10 @@ class Game
     dispatcher\replace Upgrade @
 
   on_show: (d) =>
+    sfx\play_music "ghost"
     d\push World @
     -- d\push Upgrade @ -- debug
+
 
 load_font = (img, chars)->
   font_image = imgfy img
@@ -538,11 +541,14 @@ love.load = ->
   g.setFont fonts.default
   g.setBackgroundColor 17,18, 15
 
-  export sfx = {
-    play: (name) =>
-      print "PLAYING SOUND: #{name}"
+
+  export sfx = lovekit.audio.Audio "sounds"
+  -- sfx.play_music = ->
+  sfx\preload {
+    "start_game"
   }
 
+  -- export dispatcher = Dispatcher Title!
   export dispatcher = Dispatcher Game!
   dispatcher.default_transition = FadeTransition
   dispatcher\bind love
