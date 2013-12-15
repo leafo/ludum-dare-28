@@ -19,7 +19,7 @@
  </layer>
  <objectgroup name="objects" width="20" height="20">
   <object name="spawn" x="58" y="259"/>
-  <object name="door" x="248" y="9">
+  <object name="door" x="108" y="201">
    <properties>
     <property name="to" value="maps.second"/>
    </properties>

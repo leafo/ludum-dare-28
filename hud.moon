@@ -15,6 +15,7 @@ class PaddedList
 class Hud
   new: (@world) =>
     @display_money = @world.game.money
+    @entities = DrawList!
 
   draw: =>
     {:player, :game, viewport: v} = @world
@@ -34,10 +35,14 @@ class Hud
       for item in *game.inventory
         list\draw_next item
 
+    @entities\draw v, @
     g.pop!
+
+  add: (...) => @entities\add ...
 
   update: (dt) =>
     { :player, :game } = @world
+    @entities\update dt
     @display_money = ez_approach @display_money, game.money, dt
 
 { :Hud, :ez_approach }

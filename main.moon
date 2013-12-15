@@ -8,39 +8,17 @@ import Upgrade from require "upgrade"
 import Hud from require "hud"
 import Enemy from require "enemy"
 
-class DoorBox extends Box
-  w: 30
-  h: 30
-
-  new: (x,y, @to) =>
-    @move_center x,y
-    @touching = 0
-
-  draw: =>
-    super {255, 100, 255,100}
-
-  on_hit: (entity) =>
-    @touching = 2 if entity.is_player
-
-  update: (dt) =>
-    if @touching > 0
-      @touching -= 1
-
-    true
-
 class MessageBox
   padding: 5
   visible: true
 
-  new: (text, @viewport) =>
+  new: (@text) =>
     -- @seq Sequence ->
 
-  draw: =>
-    v = @viewport
-
-    left = v\left 10
-    right = v\left 10
-    bottom v\bottom 10
+  draw: (viewport) =>
+    left = viewport\left 10
+    right = viewport\right 10
+    bottom = viewport\bottom 10
 
     font = g.getFont!
     height = font\getHeight!
@@ -52,14 +30,44 @@ class MessageBox
     g.push!
     g.translate x, y
     g.rectangle "fill", 0, 0, width, height
-    g.print text, 0,0
+    g.print @text, 0,0
     g.pop!
 
   hide: =>
+    @visible = false
 
   update: (dt) =>
     @seq\update dt if @seq
-    @viewport
+    @visible
+
+class DoorBox extends Box
+  w: 30
+  h: 30
+
+  new: (x,y, @to) =>
+    @move_center x,y
+    @touching = 0
+
+  draw: =>
+    super {255, 100, 255,100}
+
+  on_hit: (entity, world) =>
+    if entity.is_player
+      unless @message_box
+        @message_box = MessageBox "Hello world"
+        world.hud\add @message_box
+
+      @touching = 2
+
+  update: (dt) =>
+    if @touching > 0
+      @touching -= 1
+
+    if @touching == 0 and @message_box
+      @message_box\hide!
+      @message_box = nil
+
+    true
 
 class Key extends Entity
   w: 5
