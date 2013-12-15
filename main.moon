@@ -231,10 +231,18 @@ class Human extends Entity
     true
 
 class Player extends Entity
+  lazy sprite: -> Spriter "images/player.png", 32, 45
+
   is_player: true
 
   hits: 1
   health: 1
+
+  w: 15
+  h: 7
+
+  ox: 8
+  oy: 34
 
   speed: 20
   max_speed: 100
@@ -243,6 +251,12 @@ class Player extends Entity
     @seqs = DrawList!
     @accel = Vec2d 0, 0
     super x,y
+
+    with @sprite
+      @anim = StateAnim "right", {
+        left: \seq {0,1,2,3,4,5}, 0.3
+        right: \seq {0,1,2,3,4,5}, 0.3, true
+      }
 
   scare: (world) =>
     return if @scare_cooloff
@@ -274,12 +288,15 @@ class Player extends Entity
         @stunned = false
 
   draw: =>
+    @anim\draw @x - @ox, @y - @oy
+
     if @stunned
-      super {200,200,200}
+      super {200,200,200,100}
     else
-      super {255,255,255}
+      super {255,255,255, 100}
 
   update: (dt, world) =>
+    @anim\update dt
     @seqs\update dt
     decel = @speed * 10 * dt
     @accel = movement_vector! * @speed
@@ -287,6 +304,12 @@ class Player extends Entity
     if @stunned
       decel *= 4
       @accel = Vec2d!
+
+    unless @stunned
+      if @accel[1] > 0
+        @anim\set_state "right"
+      elseif @accel[1] < 0
+        @anim\set_state "left"
 
     if @accel\is_zero!
       dampen_vector @vel, decel
