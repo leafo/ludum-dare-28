@@ -1,7 +1,7 @@
 
 {graphics: g, :keyboard} = love
 
-import ez_approach from require "ui"
+import ez_approach, HList, Label from require "ui"
 
 class PaddedList
   new: (@x, @y, @padding=5) =>
@@ -17,18 +17,19 @@ class Hud
     @display_money = @world.game.money
     @entities = DrawList!
 
+    {viewport: v} = @world
+
+    @entities\add HList v\top(5), v\left(5), {
+      Label -> "HIT: #{@world.player.hits}"
+      Label -> "HP: #{@world.player.hits}"
+      Label -> "$#{math.floor @display_money}"
+    }, padding: 20
+
   draw: =>
     {:player, :game, viewport: v} = @world
+
     g.push!
     g.translate v.x, v.y
-
-    str = table.concat {
-      "HIT: #{player.hits}"
-      "HP: #{player.health}"
-      "GHOST BUCKS: #{math.floor @display_money}"
-    }, " "
-
-    g.print str, v\left(10), v\top(10)
 
     if next game.inventory
       list = PaddedList v\right(20), v\top(10)

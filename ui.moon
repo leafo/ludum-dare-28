@@ -54,13 +54,22 @@ class AnimatedLabel extends Label
     g.pop!
 
 
-class VList
+class BaseList
   padding: 5
   xalign: "left"
   yalign: "top"
 
-  new: (@x, @y, @items) =>
+  new: (@x, @y, @items, props) =>
+    if props
+      for k,v in pairs props
+        @[k] = v
 
+  update: (dt, ...) =>
+    for item in *@items
+      item\update dt, ...
+    true
+
+class VList extends BaseList
   draw: =>
     {:x, :y} = @
 
@@ -86,10 +95,16 @@ class VList
       y += @padding + item.h
       item\draw!
 
-  update: (dt, ...) =>
-    for item in *@items
-      item\update dt, ...
-    true
+class HList extends BaseList
+  draw: =>
+    {:x, :y} = @
 
-{:Label, :AnimatedLabel, :VList, :ez_approach}
+    for item in *@items
+      item.x = x
+      item.y = y
+      x += @padding + item.w
+      item\draw!
+
+
+{:Label, :AnimatedLabel, :VList, :HList, :ez_approach}
 
