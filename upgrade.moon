@@ -51,7 +51,7 @@ class Upgrade
     try_upgrade = (name) ->
       price =  @game\upgrade_price name
 
-      if @game.money > price
+      if @game.money >= price
         @game.money -= price
         @game.upgrades[name] += 1
       else
