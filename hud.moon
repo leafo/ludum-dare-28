@@ -12,6 +12,20 @@ class PaddedList
     item\draw ...
     @y += @padding + item.h
 
+class Heart extends Box
+  lazy sprite: -> Spriter("images/tiles.png")
+  w: 11
+  h: 10
+
+  new: =>
+    @x = 0
+    @y = 0
+
+  draw: =>
+    @sprite\draw "32,192,11,10", @x, @y
+
+  update: =>
+
 class Hud
   new: (@world) =>
     @display_money = @world.game.money
@@ -20,14 +34,21 @@ class Hud
     {viewport: v} = @world
 
     @entities\add VList v\top(5), v\left(5), {
+      padding: 2
+
       HList {
         padding: 20
         Label -> "HIT: #{@world.player.hits}"
         Label -> "HP: #{@world.player.hits}"
         Label -> "$#{math.floor @display_money}"
       }
-
-      Label -> "Wanker"
+      HList {
+        padding: 2
+        Heart!
+        Heart!
+        Heart!
+        Heart!
+      }
     }
 
   draw: =>
