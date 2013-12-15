@@ -54,12 +54,14 @@ class Upgrade
       if @game.money >= price
         @game.money -= price
         @game.upgrades[name] += 1
+        sfx\play "buy"
       else
         @money_label.effects\add ShakeEffect 0.5
         sfx\play "buzz"
 
     switch key
       when "return"
+        sfx\play "start_game"
         dispatcher\pop!
       when "1" -- buy hit
         try_upgrade "hit"

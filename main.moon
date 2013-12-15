@@ -569,6 +569,7 @@ love.load = ->
     "die"
     "scare"
     "steal"
+    "buy"
   }
 
   export dispatcher = Dispatcher Title!
