@@ -1,8 +1,7 @@
 
 {graphics: g, :keyboard} = love
 
-ez_approach = (val, target, dt) ->
-  approach val, target, dt * 10 * math.max 1, math.abs val - target
+import ez_approach from require "ui"
 
 class PaddedList
   new: (@x, @y, @padding=5) =>
