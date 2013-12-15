@@ -78,6 +78,27 @@ class BlinkingLabel extends Label
     if p <= @duty
       super!
 
+class RevealLabel extends Label
+  rate: 0.05
+
+  new: (text, @x, @y, fn) =>
+    @chr = 0
+    @seq = Sequence ->
+      while @chr < #text
+        @chr += 1
+        wait @rate
+
+      @done = true
+      @seq = nil
+      fn! if fn
+
+    @set_text -> text\sub 1, @chr
+
+  update: (dt) =>
+    @seq\update dt if @seq
+    super dt
+
+
 class BaseList
   padding: 5
   xalign: "left"
@@ -162,5 +183,8 @@ class HList extends BaseList
       item\draw!
 
 
-{:Label, :AnimatedLabel, :BlinkingLabel, :VList, :HList, :ez_approach}
+{
+  :Label, :AnimatedLabel, :BlinkingLabel, :RevealLabel, :VList, :HList,
+  :ez_approach
+}
 
