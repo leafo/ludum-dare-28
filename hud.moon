@@ -27,9 +27,6 @@ class Hud
     @heart = Heart!
     @heart_list = HList {
       padding: 2
-      @heart
-      @heart
-      @heart
     }
 
     @inventory_list = HList { padding: 2 }
@@ -64,6 +61,11 @@ class Hud
 
   update: (dt) =>
     { :player, :game } = @world
+
+    -- update heart list
+    if #@heart_list.items != player.health
+      @heart_list.items = [@heart for i=1,player.health]
+
     @entities\update dt
     @display_money = ez_approach @display_money, game.money, dt
 
