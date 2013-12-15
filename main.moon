@@ -350,7 +350,7 @@ class World
     @map\collides entity
 
 class Game
-  money: 100
+  money: 0
 
   new: =>
     @upgrades = {

@@ -12,8 +12,13 @@ class Upgrade
     @display_money = @game.money
     @money_last_round = @game.money_this_round
 
-    @entities\add with VList @viewport\right(10), 10, {
+    status_message = if @money_last_round == 0
+      Label "Ooof, didn't get anything"
+    else
       Label "Nice scare!"
+
+    @entities\add with VList @viewport\right(10), 10, {
+      status_message
       Label "You earned $#{@money_last_round} last round"
       Label "Press enter to continue"
     }
