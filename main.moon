@@ -248,6 +248,7 @@ class Human extends Entity
         super {100,255,100, 100}
 
   on_scare: (world) =>
+    sfx\play "steal"
     @is_scared = true
     center = Vec2d @center!
     amt = 10
@@ -301,12 +302,14 @@ class Player extends Entity
 
     radius = ScareParticle @, @scale(2, 2, true)\unpack!
     world.entities\add radius
+    sfx\play "scare"
     @hits -= 1
 
     @seqs\add Sequence\after 0.3, ->
       @scare_cooloff = false
 
   on_die: (world, complete) =>
+    sfx\play "die"
     world.entities\add FadeAway @, complete
 
   on_hit: (entity, world) =>
@@ -563,6 +566,9 @@ love.load = ->
     "hit_wall"
     "take_damage"
     "buzz"
+    "die"
+    "scare"
+    "steal"
   }
 
   export dispatcher = Dispatcher Title!
