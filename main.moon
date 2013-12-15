@@ -7,7 +7,7 @@ require "lovekit.reloader"
 import Upgrade from require "upgrade"
 import Hud from require "hud"
 import Enemy from require "enemy"
-import Title from require "title"
+import Title from require "screens"
 
 paused = false
 export show_boxes = false
@@ -120,6 +120,7 @@ class Key extends Entity
     return unless entity.is_player
 
     @on_ground = false
+    sfx\play "buy"
     table.insert world.game.inventory, @
 
   draw: =>
@@ -458,6 +459,7 @@ class World
     key, i = door\can_enter @game
     if key
       table.remove @game.inventory, i
+      sfx\play "start_game"
       dispatcher\replace World @game, door.to
 
   draw: =>

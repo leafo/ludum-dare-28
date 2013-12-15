@@ -2,7 +2,9 @@
 
 {graphics: g, :keyboard, :timer} = love
 
-import VList, BlinkingLabel from require "ui"
+import Label, VList, BlinkingLabel, RevealLabel from require "ui"
+
+local *
 
 class Title
   new: =>
@@ -23,7 +25,7 @@ class Title
   on_key: (key) =>
     if key == "return"
       sfx\play "start_game"
-      dispatcher\push Game\new_game_state!
+      dispatcher\push Tutorial! -- Game\new_game_state!
 
   draw: =>
     @viewport\apply!
@@ -39,6 +41,30 @@ class Title
 
   update: (dt) =>
     @entities\update dt
+
+
+class BaseScreen
+  new: =>
+    @viewport = Viewport scale: 3
+    @entities = DrawList!
+
+  update: (dt) =>
+    @entities\update dt
+
+  draw_inner: =>
+
+  draw: (fn=@draw_inner) =>
+    @viewport\apply!
+    fn @ if fn
+    @entities\draw!
+    @viewport\pop!
+
+class BeginNight extends BaseScreen
+
+class Tutorial extends BaseScreen
+  new: =>
+    super!
+    @entities\add RevealLabel "Hello world", 5, 5
 
 {:Title}
 
