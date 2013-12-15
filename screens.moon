@@ -61,10 +61,27 @@ class BaseScreen
 
 class BeginNight extends BaseScreen
 
+
 class Tutorial extends BaseScreen
+  dialog: {
+    "Greetings Fellow Ghost"
+    "This is a dialog"
+  }
+
   new: =>
     super!
-    @entities\add RevealLabel "Hello world", 5, 5
+    @dialog_list = VList 0,0
+    @entities\add @dialog_list
+
+    add_str = (msg, callback) ->
+      table.insert @dialog_list.items, RevealLabel msg, 0,0, callback
+
+    @entities\add Sequence ->
+      for line in *@dialog
+        print "Adding line"
+        await add_str, line
+        wait 0.2
+
 
 {:Title}
 
