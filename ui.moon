@@ -43,11 +43,13 @@ class AnimatedLabel extends Label
 
   draw: =>
     text = @is_func and @_text or @text
+    hw = @w/2
+    hh = @h/2
 
     g.push!
-    g.translate @x, @y
+    g.translate @x + hw, @y + hh
     @effects\before!
-    g.print text, -@w/2, -@h/2
+    g.print text, -hw, -hh
     @effects\after!
     g.pop!
 
