@@ -3,15 +3,6 @@
 
 import ez_approach, HList, VList, Label from require "ui"
 
-class PaddedList
-  new: (@x, @y, @padding=5) =>
-
-  draw_next: (item, ...) =>
-    item.x = @x
-    item.y = @y
-    item\draw ...
-    @y += @padding + item.h
-
 class Heart extends Box
   lazy sprite: -> Spriter("images/tiles.png")
   w: 11
@@ -33,22 +24,29 @@ class Hud
 
     {viewport: v} = @world
 
-    @entities\add VList v\top(5), v\left(5), {
+    @heart = Heart!
+    @heart_list = HList {
+      padding: 2
+      @heart
+      @heart
+      @heart
+    }
+
+    @inventory_list = HList { padding: 2 }
+
+    @entities\add VList v\left(5), v\top(5), {
       padding: 2
 
-      HList {
-        padding: 20
-        Label -> "HIT: #{@world.player.hits}"
-        Label -> "HP: #{@world.player.hits}"
-        Label -> "$#{math.floor @display_money}"
-      }
-      HList {
-        padding: 2
-        Heart!
-        Heart!
-        Heart!
-        Heart!
-      }
+      Label -> "HIT: #{@world.player.hits}"
+      @heart_list
+    }
+
+    @entities\add VList v\right(5), v\top(5), {
+      padding: 5
+      xalign: "right"
+
+      Label -> "$#{math.floor @display_money}"
+      @inventory_list
     }
 
   draw: =>
@@ -57,10 +55,7 @@ class Hud
     g.push!
     g.translate v.x, v.y
 
-    if next game.inventory
-      list = PaddedList v\right(20), v\top(10)
-      for item in *game.inventory
-        list\draw_next item
+    @inventory_list.items = game.inventory
 
     @entities\draw v, @
     g.pop!
