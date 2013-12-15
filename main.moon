@@ -13,7 +13,10 @@ class MessageBox
   visible: true
 
   new: (@text) =>
-    -- @seq Sequence ->
+    @alpha = 0
+    @seq = Sequence ->
+      tween @, 0.3, { alpha: 255 }
+      @seq = nil
 
   draw: (viewport) =>
     left = viewport\left 10
@@ -27,14 +30,18 @@ class MessageBox
     x = left
     y = bottom - height
 
+    COLOR\pusha @alpha
     g.push!
     g.translate x, y
     g.rectangle "fill", 0, 0, width, height
     g.print @text, 0,0
     g.pop!
+    COLOR\pop!
 
   hide: =>
-    @visible = false
+    @seq = Sequence ->
+      tween @, 0.2, { alpha: 0 }
+      @visible = false
 
   update: (dt) =>
     @seq\update dt if @seq
