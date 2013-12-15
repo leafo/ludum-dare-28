@@ -20,8 +20,11 @@ class Upgrade
       .xalign = "right"
 
     @entities\add with VList 10, @viewport\bottom(10), {
-      Label "1 - Buy Hit"
-      Label "2 - Buy Health"
+      Label ->
+        "1 - Buy Hit ($#{math.floor @game\upgrade_price "hit"})"
+
+      Label ->
+        "2 - Buy Health ($#{math.floor @game\upgrade_price "hp"})"
     }
       .yalign = "bottom"
 
