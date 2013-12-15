@@ -8,6 +8,8 @@ import Upgrade from require "upgrade"
 import Hud from require "hud"
 import Enemy from require "enemy"
 
+local *
+
 class MessageBox
   padding: 5
   visible: true
@@ -58,10 +60,20 @@ class DoorBox extends Box
   draw: =>
     super {255, 100, 255,100}
 
+  can_enter: (game) =>
+    for i, item in ipairs game.inventory
+      if item.__class == Key
+        return item, i
+
   on_hit: (entity, world) =>
     if entity.is_player
       unless @message_box
-        @message_box = MessageBox "Hello world"
+        msg = if @can_enter world.game
+          "Press 'Return' to enter the door"
+        else
+          "You need a key to enter the door"
+
+        @message_box = MessageBox msg
         world.hud\add @message_box
 
       @touching = 2
@@ -353,21 +365,15 @@ class World
     if key == "return"
       return unless @door.touching > 0
 
-      unless @enter_door!
+      unless @try_enter_door!
         sfx\play "buzz"
         print "you need key"
 
-  enter_door: (door=@door)=>
-    -- need a key
-    key = nil
-    for i, item in ipairs @game.inventory
-      if item.__class == Key
-        table.remove @game.inventory, i
-        key = item
-        break
-
-    return false unless key
-    dispatcher\replace World @game, door.to
+  try_enter_door: (door=@door)=>
+    key, i = door\can_enter @game
+    if key
+      table.remove @game.inventory, i
+      dispatcher\replace World @game, door.to
 
   draw: =>
     @viewport\center_on @player if @player.alive
