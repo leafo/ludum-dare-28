@@ -27,7 +27,29 @@ class Label extends Box
     @_update_from_fun!
 
   draw: =>
-    g.print @is_func and @_text or @text, @x, @y
+    text = @is_func and @_text or @text
+    g.print text, @x, @y
+
+-- has effect list
+class AnimatedLabel extends Label
+  new: (...) =>
+    super ...
+    @effects = EffectList!
+
+  update: (dt) =>
+    @effects\update dt
+    super dt
+
+  draw: =>
+    text = @is_func and @_text or @text
+
+    g.push!
+    g.translate @x, @y
+    @effects\before!
+    g.print text, -@w/2, -@h/2
+    @effects\after!
+    g.pop!
+
 
 class VList
   padding: 5
@@ -88,8 +110,11 @@ class Upgrade
     }
       .yalign = "bottom"
 
+
+    @money_label = AnimatedLabel -> "$#{math.floor @display_money} GB"
+
     @entities\add with VList @viewport\right(10), @viewport\bottom(10), {
-      Label -> "$#{math.floor @display_money} GB"
+      @money_label
     }
       .yalign = "bottom"
       .xalign = "right"
@@ -102,10 +127,12 @@ class Upgrade
   on_key: (key) =>
     try_upgrade = (name) ->
       price =  @game\upgrade_price name
+
       if @game.money > price
         @game.money -= price
         @game.upgrades[name] += 1
       else
+        @money_label.effects\add ShakeEffect 0.5
         sfx\play "buzz"
 
     switch key
