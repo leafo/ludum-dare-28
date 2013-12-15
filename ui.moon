@@ -26,6 +26,7 @@ class Label extends Box
 
   update: (dt) =>
     @_update_from_fun!
+    true
 
   draw: =>
     text = @is_func and @_text or @text
@@ -59,6 +60,23 @@ class AnimatedLabel extends Label
     @effects\after!
     g.pop!
 
+
+class BlinkingLabel extends Label
+  rate: 1.2
+  duty: 0.8 -- percent of time visible
+
+  elapsed: 0
+
+  update: (dt) =>
+    @elapsed += dt
+    super dt
+
+  draw: =>
+    scaled = @elapsed / @rate
+    p = scaled - math.floor scaled
+
+    if p <= @duty
+      super!
 
 class BaseList
   padding: 5
@@ -144,5 +162,5 @@ class HList extends BaseList
       item\draw!
 
 
-{:Label, :AnimatedLabel, :VList, :HList, :ez_approach}
+{:Label, :AnimatedLabel, :BlinkingLabel, :VList, :HList, :ez_approach}
 
