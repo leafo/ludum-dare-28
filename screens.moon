@@ -61,27 +61,38 @@ class BaseScreen
 
 class BeginNight extends BaseScreen
 
+join = (strs) ->
+  table.concat strs, "\n"
 
 class Tutorial extends BaseScreen
   dialog: {
-    "Greetings Fellow Ghost"
-    "This is a dialog"
+    join {
+      "Greetings fellow ghost!"
+      "and I hate you"
+      ""
+      "Press Enter..."
+      "(Esc skips tutorial)"
+    }
+
+    -- join {
+    -- }
+
   }
 
   new: =>
     super!
-    @dialog_list = VList 0,0
-    @entities\add @dialog_list
 
-    add_str = (msg, callback) ->
-      table.insert @dialog_list.items, RevealLabel msg, 0,0, callback
+    add_str = (str, callback) ->
+      with l = RevealLabel str, 10,10, callback
+        @entities\add l
 
     @entities\add Sequence ->
-      for line in *@dialog
-        print "Adding line"
-        await add_str, line
-        wait 0.2
+      for msg in *@dialog
+        label = await add_str, msg
+        wait_for_key "return"
+        label.alive = false
 
+      print "all done"
 
 {:Title}
 

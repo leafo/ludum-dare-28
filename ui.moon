@@ -26,7 +26,7 @@ class Label extends Box
 
   update: (dt) =>
     @_update_from_fun!
-    true
+    @alive
 
   draw: =>
     text = @is_func and @_text or @text
@@ -90,7 +90,7 @@ class RevealLabel extends Label
 
       @done = true
       @seq = nil
-      fn! if fn
+      fn @ if fn
 
     @set_text -> text\sub 1, @chr
 
