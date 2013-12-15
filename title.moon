@@ -23,7 +23,7 @@ class Title
   on_key: (key) =>
     if key == "return"
       sfx\play "start_game"
-      dispatcher\push Game!
+      dispatcher\push Game\new_game_state!
 
   draw: =>
     @viewport\apply!

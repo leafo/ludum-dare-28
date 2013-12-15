@@ -417,6 +417,9 @@ class World
     @collide = UniformGrid!
 
   on_show: =>
+    unless sfx.current_music == "ghost"
+      sfx\play_music "ghost"
+
     @game\on_new_round!
     @game\prepare_player @player
 
@@ -495,6 +498,10 @@ class World
 _G.Game = class Game
   money: 0
 
+  @new_game_state: =>
+    game = Game!
+    World game
+
   new: =>
     @upgrades = {
       hands: 0
@@ -524,7 +531,6 @@ _G.Game = class Game
     dispatcher\replace Upgrade @
 
   on_show: (d) =>
-    sfx\play_music "ghost"
     d\push World @
     -- d\push Upgrade @ -- debug
 
@@ -548,8 +554,7 @@ love.load = ->
     "start_game"
   }
 
-  -- export dispatcher = Dispatcher Title!
-  export dispatcher = Dispatcher Game!
+  export dispatcher = Dispatcher Title!
   dispatcher.default_transition = FadeTransition
   dispatcher\bind love
 
