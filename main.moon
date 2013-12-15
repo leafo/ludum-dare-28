@@ -239,7 +239,9 @@ class Human extends Entity
     if @has_key
       dir = Vec2d(world.player\center!) - center
       dir = dir\normalized!\random_heading!
-      world.entities\add Key @x, @y, dir * 150 * rand(1, 1.3)
+      x,y = @center!
+
+      world.entities\add Key x, y, dir * 150 * rand(1, 1.3)
 
   update: (dt) =>
     true
