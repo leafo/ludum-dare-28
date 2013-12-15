@@ -5,7 +5,7 @@
  </tileset>
  <layer name="Tile Layer 1" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjZmBgYCYBMyFhdD4TiWbB9DPiwKPmjZo3ah5+88jBhMzDJU8qHjVvcJpHTQwAsRIC/g==
+   eJxjZmBgYCYSKwKxEhAr48HEmgXCoUBsBMTGeDCp5jkBsTMeTKp5YUAcjgePmje8zSMmzSNjQuYRk+aRcRAR5hFK88g4iQjzCPmBFDxq3vA2DwDFTls2
   </data>
  </layer>
  <layer name="collide" width="20" height="20" opacity="0.41">
@@ -14,7 +14,7 @@
    <property name="solid" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYCANsBDApAJ8ekbNGzVv1Dz8cuRgQuZRC4yaNzjNoyYGAAHNATE=
+   eJxjYBhegIUAJsc8cuRGzRs1j17mEUrzxOYBFjSaUjBq3uA1j1oYAIl+ARk=
   </data>
  </layer>
  <objectgroup name="objects" width="20" height="20">
