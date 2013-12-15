@@ -8,6 +8,59 @@ import Upgrade from require "upgrade"
 import Hud from require "hud"
 import Enemy from require "enemy"
 
+class DoorBox extends Box
+  w: 30
+  h: 30
+
+  new: (x,y, @to) =>
+    @move_center x,y
+    @touching = 0
+
+  draw: =>
+    super {255, 100, 255,100}
+
+  on_hit: (entity) =>
+    @touching = 2 if entity.is_player
+
+  update: (dt) =>
+    if @touching > 0
+      @touching -= 1
+
+    true
+
+class MessageBox
+  padding: 5
+  visible: true
+
+  new: (text, @viewport) =>
+    -- @seq Sequence ->
+
+  draw: =>
+    v = @viewport
+
+    left = v\left 10
+    right = v\left 10
+    bottom v\bottom 10
+
+    font = g.getFont!
+    height = font\getHeight!
+    width = right - left
+
+    x = left
+    y = bottom - height
+
+    g.push!
+    g.translate x, y
+    g.rectangle "fill", 0, 0, width, height
+    g.print text, 0,0
+    g.pop!
+
+  hide: =>
+
+  update: (dt) =>
+    @seq\update dt if @seq
+    @viewport
+
 class Key extends Entity
   w: 5
   h: 5
@@ -257,7 +310,9 @@ class World
             sx = o.x
             sy = o.y
           when "door"
-            @door = o
+            @door = DoorBox o.x, o.y,
+              assert(o.properties.to, "door needs need to")
+            @entities\add @door
           when "human"
             @entities\add Human o.x, o.y
           when "enemy"
@@ -281,18 +336,13 @@ class World
       @player\scare @
 
     if key == "return"
-      return unless @door
+      return unless @door.touching > 0
 
-      pos = Vec2d @player\center!
-      door_pos = Vec2d @door.x, @door.y
-      door_dist = (pos - door_pos)\len!
+      unless @enter_door!
+        sfx\play "buzz"
+        print "you need key"
 
-      if door_dist < 20
-        unless @enter_door!
-          sfx\play "buzz"
-          print "you need key"
-
-  enter_door: =>
+  enter_door: (door=@door)=>
     -- need a key
     key = nil
     for i, item in ipairs @game.inventory
@@ -302,8 +352,7 @@ class World
         break
 
     return false unless key
-    dispatcher\replace World @game,
-      assert @door.properties.to, "door missing to"
+    dispatcher\replace World @game, door.to
 
   draw: =>
     @viewport\center_on @player if @player.alive
