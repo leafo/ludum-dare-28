@@ -16,6 +16,7 @@ local *
 class MessageBox
   padding: 5
   visible: true
+  box_color: {0,0,0, 100}
 
   new: (@text) =>
     @alpha = 0
@@ -35,10 +36,14 @@ class MessageBox
     x = left
     y = bottom - height
 
+    p = @padding
+
     COLOR\pusha @alpha
     g.push!
     g.translate x, y
-    g.rectangle "fill", 0, 0, width, height
+    COLOR\push @box_color
+    g.rectangle "fill", -p, -p, width + p * 2, height + p * 2
+    COLOR\pop!
     g.print @text, 0,0
     g.pop!
     COLOR\pop!
@@ -73,9 +78,9 @@ class DoorBox extends Box
     if entity.is_player
       unless @message_box
         msg = if @can_enter world.game
-          "Press 'Return' to enter the door"
+          "Press 'Return' to enter"
         else
-          "You need a key to enter the door"
+          "You need a key"
 
         @message_box = MessageBox msg
         world.hud\add @message_box
@@ -365,7 +370,7 @@ class Player extends Entity
 
 class World
   new: (@game, map="maps.first") =>
-    @viewport = EffectViewport scale: 2
+    @viewport = EffectViewport scale: 3
     sx, sy = 0, 0
 
     @entities = DrawList!

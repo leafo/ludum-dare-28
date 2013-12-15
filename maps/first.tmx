@@ -28,13 +28,12 @@
   </data>
  </layer>
  <objectgroup name="objects" width="32" height="32">
-  <object name="spawn" x="73" y="382"/>
+  <object name="spawn" x="101" y="382"/>
   <object name="door" x="120" y="308">
    <properties>
     <property name="to" value="maps.second"/>
    </properties>
   </object>
   <object name="human" x="280" y="152"/>
-  <object name="enemy" x="274" y="328"/>
  </objectgroup>
 </map>

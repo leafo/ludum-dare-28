@@ -19,7 +19,7 @@ class Upgrade
 
     @entities\add with VList @viewport\right(10), 10, {
       status_message
-      Label "You earned $#{@money_last_round} last round"
+      Label "Earned +$#{@money_last_round}"
       Label "Press enter to continue"
     }
       .xalign = "right"
