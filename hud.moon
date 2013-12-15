@@ -1,7 +1,7 @@
 
 {graphics: g, :keyboard} = love
 
-import ez_approach, HList, Label from require "ui"
+import ez_approach, HList, VList, Label from require "ui"
 
 class PaddedList
   new: (@x, @y, @padding=5) =>
@@ -19,11 +19,16 @@ class Hud
 
     {viewport: v} = @world
 
-    @entities\add HList v\top(5), v\left(5), {
-      Label -> "HIT: #{@world.player.hits}"
-      Label -> "HP: #{@world.player.hits}"
-      Label -> "$#{math.floor @display_money}"
-    }, padding: 20
+    @entities\add VList v\top(5), v\left(5), {
+      HList {
+        padding: 20
+        Label -> "HIT: #{@world.player.hits}"
+        Label -> "HP: #{@world.player.hits}"
+        Label -> "$#{math.floor @display_money}"
+      }
+
+      Label -> "Wanker"
+    }
 
   draw: =>
     {:player, :game, viewport: v} = @world

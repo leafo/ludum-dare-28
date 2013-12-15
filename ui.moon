@@ -31,6 +31,12 @@ class Label extends Box
     text = @is_func and @_text or @text
     g.print text, @x, @y
 
+    -- COLOR\push 255,100,100, 200
+    -- g.rectangle "fill", @x,@y, 2,2
+    -- g.rectangle "fill", @x+@w,@y+@h, 2,2
+    -- COLOR\pop!
+
+
 -- has effect list
 class AnimatedLabel extends Label
   new: (...) =>
@@ -58,18 +64,41 @@ class BaseList
   padding: 5
   xalign: "left"
   yalign: "top"
+  w: 0
+  h: 0
 
-  new: (@x, @y, @items, props) =>
-    if props
-      for k,v in pairs props
+  -- can pass instance properties into items
+  new: (@x, @y, @items) =>
+    -- not specifying position
+    if type(@x) == "table"
+      @items = @x
+      @x = 0
+      @y = 0
+
+    -- extract props
+    for k,v in pairs @items
+      if type(k) == "string"
+        @items[k] = nil
         @[k] = v
+
+  update_size: -> error "override me"
 
   update: (dt, ...) =>
     for item in *@items
       item\update dt, ...
+    @update_size!
     true
 
 class VList extends BaseList
+  update_size: =>
+    @w, @h = 0, 0
+    for item in *@items
+      @h += item.h + @padding
+      if item.w > @w
+        @w = item.w
+
+    @h -= @padding if @h > 0
+
   draw: =>
     {:x, :y} = @
 
@@ -96,6 +125,15 @@ class VList extends BaseList
       item\draw!
 
 class HList extends BaseList
+  update_size: =>
+    @w, @h = 0, 0
+    for item in *@items
+      @w += item.w + @padding
+      if item.h > @h
+        @h = item.h
+
+    @w -= @padding if @w > 0
+
   draw: =>
     {:x, :y} = @
 
