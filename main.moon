@@ -313,6 +313,8 @@ class Player extends Entity
     return if @stunned
     if entity.is_enemy
       @health -= 1
+      sfx\play "take_damage"
+
       if @health <= 0
         world\kill_player!
 
@@ -376,6 +378,13 @@ class Player extends Entity
       @vel[1] = -@vel[1]/2
     if cy
       @vel[2] = -@vel[2]/2
+
+    if cx or cy
+      unless @hit_timeout
+        sfx\play "hit_wall"
+        @hit_timeout = true
+        @seqs\add Sequence\after 0.1, ->
+          @hit_timeout = false
 
     @hits > 0 and @health > 0
 
@@ -552,6 +561,8 @@ love.load = ->
   -- sfx.play_music = ->
   sfx\preload {
     "start_game"
+    "hit_wall"
+    "take_damage"
   }
 
   export dispatcher = Dispatcher Title!
