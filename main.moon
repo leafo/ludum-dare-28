@@ -536,7 +536,7 @@ love.load = ->
   }
 
   g.setFont fonts.default
-  g.setBackgroundColor 30,30,30
+  g.setBackgroundColor 17,18, 15
 
   export sfx = {
     play: (name) =>
