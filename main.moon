@@ -8,6 +8,8 @@ import Upgrade from require "upgrade"
 import Hud from require "hud"
 import Enemy from require "enemy"
 
+paused = false
+
 local *
 
 class MessageBox
@@ -238,7 +240,7 @@ class Player extends Entity
   hits: 1
   health: 1
 
-  w: 15
+  w: 16
   h: 7
 
   ox: 8
@@ -288,7 +290,9 @@ class Player extends Entity
         @stunned = false
 
   draw: =>
+    COLOR\pusha 225
     @anim\draw @x - @ox, @y - @oy
+    COLOR\pop!
 
     if @stunned
       super {200,200,200,100}
@@ -385,6 +389,10 @@ class World
     if key == " "
       @player\scare @
 
+    if key == "p"
+      print "pausing"
+      paused = not paused
+
     if key == "return"
       return unless @door.touching > 0
 
@@ -412,6 +420,8 @@ class World
     g.print love.timer.getFPS!, 10, 10
 
   update: (dt) =>
+    return if paused
+
     @viewport\update dt
     @hud\update dt, @
     @particles\update dt

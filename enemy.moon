@@ -2,15 +2,27 @@
 {graphics: g, :keyboard} = love
 
 class Enemy extends Entity
+  lazy sprite: -> Spriter "images/enemy.png", 32, 52
+
+  w: 16
+  h: 7
+
   is_enemy: true
   health: 1
 
-  w: 10
-  h: 10
+  ox: 9
+  oy: 40
+
   speed: 20
 
   new: (x,y) =>
     super x, y
+    with @sprite
+      @anim = StateAnim "left", {
+        left: \seq {0,1,2,3,4,5}, 0.3
+        right: \seq {0,1,2,3,4,5}, 0.3, true
+      }
+
     @ai = Sequence ->
       dir = switch pick_dist {
         rand: 2
@@ -30,10 +42,20 @@ class Enemy extends Entity
       again!
 
   draw: =>
-    super {255,100,100}
+    @anim\draw @x - @ox, @y - @oy
+    super {255,100,100, 100}
 
   update: (dt, @world) =>
+    COLOR\pusha 225
     @ai\update dt
+    COLOR\pop!
+
+    if @vel[1] > 0
+      @anim\set_state "right"
+    elseif @vel[1] < 0
+      @anim\set_state "left"
+
+    @anim\update dt
 
     cx, cy = @fit_move @vel[1] * dt, @vel[2] * dt, @world
 
