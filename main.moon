@@ -432,6 +432,7 @@ class World
       paused = not paused
 
     if key == "return"
+      return unless @door
       return unless @door.touching > 0
 
       unless @try_enter_door!
