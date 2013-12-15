@@ -37,7 +37,7 @@ class Hud
     @entities\add VList v\left(5), v\top(5), {
       padding: 2
 
-      Label -> "HIT: #{@world.player.hits}"
+      Label -> "HAUNTS: #{@world.player.hits}"
       @heart_list
     }
 
