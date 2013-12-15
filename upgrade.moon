@@ -55,7 +55,6 @@ class Upgrade
 
     switch key
       when "return"
-        @game\on_new_round!
         dispatcher\pop!
       when "1" -- buy hit
         try_upgrade "hit"

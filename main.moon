@@ -266,13 +266,15 @@ class World
 
 
     @player = Player sx, sy
+
     @entities\add @player
 
     @hud = Hud @
     @collide = UniformGrid!
 
   on_show: =>
-    @game.inventory = {}
+    @game\on_new_round!
+    @game\prepare_player @player
 
   on_key: (key) =>
     if key == " "
@@ -287,13 +289,13 @@ class World
 
       if door_dist < 20
         unless @enter_door!
+          sfx\play "buzz"
           print "you need key"
 
   enter_door: =>
     -- need a key
     key = nil
     for i, item in ipairs @game.inventory
-      print item.__class
       if item.__class == Key
         table.remove @game.inventory, i
         key = item
@@ -363,6 +365,10 @@ class Game
     @inventory = {}
     @money_this_round = 0
 
+  prepare_player: (player) =>
+    player.hits = Player.hits + @upgrades.hit
+    player.health = Player.health + @upgrades.hp
+
   give_money: (amt) =>
     @money_this_round += amt
     @money += amt
@@ -375,8 +381,8 @@ class Game
     dispatcher\replace Upgrade @
 
   on_show: (d) =>
-    --d\push World @
-    d\push Upgrade @
+    d\push World @
+    -- d\push Upgrade @ -- debug
 
 load_font = (img, chars)->
   font_image = imgfy img
