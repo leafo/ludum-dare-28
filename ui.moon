@@ -107,7 +107,7 @@ class BaseList
   h: 0
 
   -- can pass instance properties into items
-  new: (@x, @y, @items) =>
+  new: (@x, @y, @items={}) =>
     -- not specifying position
     if type(@x) == "table"
       @items = @x
