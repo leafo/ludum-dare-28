@@ -98,23 +98,33 @@ class DoorBox extends Box
     true
 
 class Key extends Entity
-  w: 5
+  lazy sprite: -> Spriter "images/tiles.png", 16, 16
+
+  w: 10
   h: 5
+
+  ox: 3
+  oy: 3
+
   on_ground: true
   collectable: false
 
   new: (x,y, vel) =>
     super x, y
-    @vel = vel
+    @vel = vel if vel
 
   on_hit: (entity, world) =>
+    return unless @on_ground
     return if @vel\len! > 10
     return unless entity.is_player
+
     @on_ground = false
     table.insert world.game.inventory, @
 
   draw: =>
-    super {255, 255, 100}
+    @sprite\draw "48,192,16,10", @x - @ox, @y - @oy
+    if show_boxes
+      super {255, 255, 100, 100}
 
   update: (dt, world) =>
     return false unless @on_ground
@@ -408,6 +418,10 @@ class World
   on_show: =>
     @game\on_new_round!
     @game\prepare_player @player
+
+  mousepressed: (x,y) =>
+    print @viewport\unproject x, y
+
 
   on_key: (key) =>
     if key == " "
