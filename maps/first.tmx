@@ -5,10 +5,10 @@
  </tileset>
  <layer name="Tile Layer 1" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjZmBgYCYSKwKxEhAr48HEmgXCoUBsBMTGeDCp5jkBsTMeTKp5YUAcjgePmje8zSMmzSNjQuYRk+aRcRAR5hFK88g4iQjzCPmBFDxq3vA2DwDFTls2
+   eJxjZmBgYCYSKwKxEhAr48HEmgXCoUBsBMTGeDCp5jkBsTMeTKp5YUAcgQePmje8zSMmzSNjQuYRk+aRcRAR5hFK88g4iQjzCPmBFDxq3vA2DwBOMFv6
   </data>
  </layer>
- <layer name="collide" width="20" height="20" opacity="0.41">
+ <layer name="collide" width="20" height="20" visible="0" opacity="0.41">
   <properties>
    <property name="hidden" value="true"/>
    <property name="solid" value="true"/>
