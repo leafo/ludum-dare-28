@@ -43,7 +43,8 @@ class Enemy extends Entity
 
   draw: =>
     @anim\draw @x - @ox, @y - @oy
-    super {255,100,100, 100}
+    if show_boxes
+      super {255,100,100, 100}
 
   update: (dt, @world) =>
     COLOR\pusha 225

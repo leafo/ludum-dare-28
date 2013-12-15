@@ -9,6 +9,7 @@ import Hud from require "hud"
 import Enemy from require "enemy"
 
 paused = false
+export show_boxes = false
 
 local *
 
@@ -60,7 +61,8 @@ class DoorBox extends Box
     @touching = 0
 
   draw: =>
-    super {255, 100, 255,100}
+    if show_boxes
+      super {255, 100, 255,100}
 
   can_enter: (game) =>
     for i, item in ipairs game.inventory
@@ -223,10 +225,11 @@ class Human extends Entity
   draw: =>
     @anim\draw @x - @ox, @y - @oy
 
-    if @is_scared
-      super {100,255,255, 100}
-    else
-      super {100,255,100, 100}
+    if show_boxes
+      if @is_scared
+        super {100,255,255, 100}
+      else
+        super {100,255,100, 100}
 
   on_scare: (world) =>
     @is_scared = true
@@ -308,10 +311,11 @@ class Player extends Entity
     @anim\draw @x - @ox, @y - @oy
     COLOR\pop!
 
-    if @stunned
-      super {200,200,200,100}
-    else
-      super {255,255,255, 100}
+    if show_boxes
+      if @stunned
+        super {200,200,200,100}
+      else
+        super {255,255,255, 100}
 
   update: (dt, world) =>
     @anim\update dt
