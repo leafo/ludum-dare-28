@@ -205,15 +205,28 @@ class ScareParticle extends Box
     @used = true
 
 class Human extends Entity
+  lazy sprite: -> Spriter "images/tiles.png", 16, 16
+
   is_human: true
   is_scared: false
   has_key: true
 
+  h: 30
+
+  ox: 7
+  oy: 15
+
+  new: (...) =>
+    super ...
+    @anim = @sprite\seq {"0,192,32,48"}, 0
+
   draw: =>
+    @anim\draw @x - @ox, @y - @oy
+
     if @is_scared
-      super {100,255,255}
+      super {100,255,255, 100}
     else
-      super {100,255,100}
+      super {100,255,100, 100}
 
   on_scare: (world) =>
     @is_scared = true
