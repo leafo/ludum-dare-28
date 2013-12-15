@@ -450,7 +450,6 @@ class World
 
       unless @try_enter_door!
         sfx\play "buzz"
-        print "you need key"
 
   try_enter_door: (door=@door)=>
     key, i = door\can_enter @game
@@ -563,6 +562,7 @@ love.load = ->
     "start_game"
     "hit_wall"
     "take_damage"
+    "buzz"
   }
 
   export dispatcher = Dispatcher Title!
