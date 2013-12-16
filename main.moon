@@ -251,7 +251,6 @@ class Human extends Entity
     if entity.is_player
       @touching_player = 2
       unless @message_box
-        print "adding message box"
         @message_box = MessageBox "Press 'X' to haunt"
         world.hud\show_message_box @message_box
 
