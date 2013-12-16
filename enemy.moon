@@ -1,6 +1,8 @@
 
 {graphics: g, :keyboard} = love
 
+import FadeAway from require "misc"
+
 class Enemy extends Entity
   lazy sprite: -> Spriter "images/enemy.png", 32, 52
 
@@ -23,6 +25,8 @@ class Enemy extends Entity
         right: \seq {0,1,2,3,4,5}, 0.3, true
       }
 
+    @effects = EffectList!
+
     @ai = Sequence ->
       dir = switch pick_dist {
         rand: 2
@@ -42,19 +46,26 @@ class Enemy extends Entity
       again!
 
   draw: =>
+    @effects\before!
+    COLOR\pusha 225
     @anim\draw @x - @ox, @y - @oy
+    COLOR\pop!
+    @effects\after!
+
     if show_boxes
       super {255,100,100, 100}
 
   update: (dt, @world) =>
-    COLOR\pusha 225
-    @ai\update dt
-    COLOR\pop!
+    @effects\update dt
+    @ai\update dt if @ai
 
-    if @vel[1] > 0
-      @anim\set_state "right"
-    elseif @vel[1] < 0
-      @anim\set_state "left"
+    if @stunned
+      dampen_vector @vel, 200 * dt
+    else
+      if @vel[1] > 0
+        @anim\set_state "right"
+      elseif @vel[1] < 0
+        @anim\set_state "left"
 
     @anim\update dt
 
@@ -65,8 +76,28 @@ class Enemy extends Entity
     if cy
       @vel[2] = -@vel[2]
 
-    true
+    @health > 0
 
+  on_scare: (world) =>
+    return if @stunned
 
+    old_ai = @ai
+    old_vel = @vel
+    @stunned = true
+    @effects\add ShakeEffect 0.5
+    @effects\add FlashEffect!
+
+    @health -= 1
+
+    if @health == 0
+      world.entities\add FadeAway @
+      @ai = nil
+    else
+      @ai = Sequence ->
+        @vel = world.player\vector_to(@)\normalized! * 150
+        wait 0.5
+        @stunned = false
+        @vel = old_vel
+        @ai = old_ai
 
 { :Enemy }

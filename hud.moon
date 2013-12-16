@@ -59,6 +59,13 @@ class Hud
 
   add: (...) => @entities\add ...
 
+  show_message_box: (mbox) =>
+    if @msg_box and @msg_box.visible
+      @msg_box\hide!
+
+    @msg_box = mbox
+    @entities\add mbox
+
   update: (dt) =>
     { :player, :game } = @world
 

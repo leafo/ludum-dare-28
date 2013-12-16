@@ -1,13 +1,14 @@
 
 require "lovekit.all"
-require "lovekit.reloader"
+-- require "lovekit.reloader"
 
 {graphics: g, :keyboard} = love
 
 import Upgrade from require "upgrade"
 import Hud from require "hud"
 import Enemy from require "enemy"
-import Title from require "screens"
+import Title, WinGame from require "screens"
+import FadeAway from require "misc"
 
 paused = false
 export show_boxes = false
@@ -50,8 +51,11 @@ class MessageBox
     COLOR\pop!
 
   hide: =>
+    return if @hiding or not @visible
+    @hiding = true
     @seq = Sequence ->
       tween @, 0.2, { alpha: 0 }
+      @hiding = false
       @visible = false
 
   update: (dt) =>
@@ -79,12 +83,12 @@ class DoorBox extends Box
     if entity.is_player
       unless @message_box
         msg = if @can_enter world.game
-          "Press 'Return' to enter"
+          "Press 'C' to enter"
         else
           "You need a key"
 
         @message_box = MessageBox msg
-        world.hud\add @message_box
+        world.hud\show_message_box @message_box
 
       @touching = 2
 
@@ -142,38 +146,6 @@ class Key extends Entity
 
     true
 
-class FadeAway
-  time: 0.8
-  new: (@entity, @done_fn) =>
-    @life = @time
-
-  draw: =>
-    p = smoothstep 0,1, 1 - math.max @life/@time, 0
-    drift = p * 10
-    sway = (p + 0.5) * 5 * math.sin (@time - @life) * 10
-
-    COLOR\pusha (1 - p) * 255
-    x, y = @entity\center!
-    g.push!
-    g.translate x + sway, y - drift
-    g.scale p + 1, p + 1
-    g.translate -x,-y
-    @entity\draw!
-    g.pop!
-
-    COLOR\pop!
-
-  update: (dt) =>
-    @life -= dt
-    dampen_vector @entity.vel, dt * 400
-    @entity\move unpack @entity.vel * dt
-
-    if @life <= 0
-      @done_fn and @done_fn @
-      false
-    else
-      true
-
 class BooParticle extends ImageParticle
   lazy sprite: -> Spriter "images/tiles.png", 16, 16
   w: 39
@@ -221,7 +193,7 @@ class MoneyEmitter extends Emitter
       Vec2d(0, 300)
 
 class ScareParticle extends Box
-  life: 1
+  life: 0.5
   used: false -- has hit something
 
   new: (@player, ...)=>
@@ -253,6 +225,7 @@ class Human extends Entity
 
   ox: 7
   oy: 30
+  touching_player: 0
 
   new: (x, y, @has_key=true) =>
     @move_center x, y
@@ -271,6 +244,16 @@ class Human extends Entity
         super {100,255,255, 100}
       else
         super {100,255,100, 100}
+
+  on_hit: (entity, world) =>
+    return if @is_scared
+
+    if entity.is_player
+      @touching_player = 2
+      unless @message_box
+        print "adding message box"
+        @message_box = MessageBox "Press 'X' to haunt"
+        world.hud\show_message_box @message_box
 
   on_scare: (world) =>
     sfx\play "steal"
@@ -291,6 +274,14 @@ class Human extends Entity
 
   update: (dt) =>
     @effects\update dt
+
+    if @touching_player > 0
+      @touching_player -= 1
+
+    if @touching_player == 0 and @message_box
+      @message_box\hide!
+      @message_box = nil
+
     true
 
 class Player extends Entity
@@ -307,8 +298,8 @@ class Player extends Entity
   ox: 8
   oy: 34
 
-  speed: 20
-  max_speed: 100
+  speed: 18
+  max_speed: 60
 
   new: (x,y) =>
     @seqs = DrawList!
@@ -327,7 +318,7 @@ class Player extends Entity
 
     @scare_cooloff = true
 
-    radius = @scale(2, 2, true)
+    radius = @scale(2, 4, true)
     world.entities\add ScareParticle @, radius\unpack!
     world.particles\add BooEmitter world, radius\center!
 
@@ -456,6 +447,15 @@ class World
     @hud = Hud @
     @collide = UniformGrid!
 
+
+    -- map specific things
+    switch map
+      when "maps.second"
+        msg_box = MessageBox "Haunt red ghost to kill"
+        @hud\show_message_box msg_box
+        @seqs\add Sequence\after 5, ->
+          msg_box\hide!
+
   on_show: =>
     unless sfx.current_music == "ghost"
       sfx\play_music "ghost"
@@ -468,25 +468,27 @@ class World
     -- @particles\add BooEmitter @, x,y
 
   on_key: (key) =>
-    if key == " "
+    if key == " " or key == "x"
       @player\scare @
 
     if key == "p"
       paused = not paused
 
-    if key == "return"
-      return unless @door
-      return unless @door.touching > 0
+    if key == "return" or key == "c"
+      if @door and @door.touching > 0 and @try_enter_door!
+        return
 
-      unless @try_enter_door!
-        sfx\play "buzz"
+      sfx\play "buzz"
 
   try_enter_door: (door=@door)=>
     key, i = door\can_enter @game
     if key
       table.remove @game.inventory, i
       sfx\play "start_game"
-      dispatcher\replace World @game, door.to, @player
+      if door.to == "finish"
+        dispatcher\replace WinGame!
+      else
+        dispatcher\replace World @game, door.to, @player
 
   draw: =>
     @viewport\center_on @player if @player.alive
@@ -513,10 +515,12 @@ class World
     @collide\clear!
 
     for e in *@entities
+      continue unless e.alive
       continue unless e.w -- probably a rect
       @collide\add e
 
     for e in *@entities
+      continue unless e.alive
       continue unless e.on_hit
       for touching in *@collide\get_touching e
         e\on_hit touching, @
@@ -602,7 +606,6 @@ love.load = ->
   }
 
   export dispatcher = Dispatcher Title!
-  export dispatcher = Dispatcher Game!
   dispatcher.default_transition = FadeTransition
   dispatcher\bind love
 

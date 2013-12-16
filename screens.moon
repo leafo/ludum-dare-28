@@ -126,8 +126,8 @@ class Tutorial extends TextScreen
 
     join {
       "Arrow keys move"
-      "Z haunts"
-      "X opens doors"
+      "'X' haunts"
+      "'C' opens doors"
       ""
       "Press Enter to start"
     }
