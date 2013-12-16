@@ -26,7 +26,7 @@ class Upgrade
 
     @entities\add with VList 10, @viewport\bottom(10), {
       Label ->
-        "1 - Buy Hit ($#{math.floor @game\upgrade_price "hit"})"
+        "1 - Buy Haunt ($#{math.floor @game\upgrade_price "hit"})"
 
       Label ->
         "2 - Buy Health ($#{math.floor @game\upgrade_price "hp"})"
