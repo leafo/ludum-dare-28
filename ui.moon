@@ -79,7 +79,7 @@ class BlinkingLabel extends Label
       super!
 
 class RevealLabel extends Label
-  rate: 0.05
+  rate: 0.03
 
   new: (text, @x, @y, fn) =>
     @chr = 0

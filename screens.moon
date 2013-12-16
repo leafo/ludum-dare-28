@@ -25,7 +25,7 @@ class Title
   on_key: (key) =>
     if key == "return"
       sfx\play "start_game"
-      dispatcher\push Tutorial! -- Game\new_game_state!
+      dispatcher\push Tutorial!
 
   draw: =>
     @viewport\apply!
@@ -68,14 +68,44 @@ class Tutorial extends BaseScreen
   dialog: {
     join {
       "Greetings fellow ghost!"
-      "and I hate you"
+      "Times are tough."
       ""
       "Press Enter..."
       "(Esc skips tutorial)"
     }
 
-    -- join {
-    -- }
+    join {
+      "You need to head to the"
+      "human world to get some"
+      "ghost bucks."
+      ""
+      "Press Enter..."
+    }
+
+    join {
+      "Haunt humans to steal"
+      "their money. Watch out"
+      "for evil ghosts."
+      ""
+      "Press Enter..."
+    }
+
+    join {
+      "You only have one"
+      "haunt in you, so get"
+      "some money to upgrade."
+      ""
+      "Press Enter..."
+    }
+
+
+    join {
+      "Arrow keys move"
+      "Z haunts"
+      "X opens doors"
+      ""
+      "Press Enter to start"
+    }
 
   }
 
@@ -92,7 +122,16 @@ class Tutorial extends BaseScreen
         wait_for_key "return"
         label.alive = false
 
-      print "all done"
+      @start_game!
+
+  start_game: =>
+    dispatcher\push Game\new_game_state!
+
+  on_key: (key) =>
+    if key == "escape"
+      @start_game!
+      return true
+
 
 {:Title}
 
