@@ -421,6 +421,50 @@ return {
           height = 0,
           visible = true,
           properties = {}
+        },
+        {
+          name = "human",
+          type = "",
+          shape = "rectangle",
+          x = 500,
+          y = 219,
+          width = 0,
+          height = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          name = "enemy",
+          type = "",
+          shape = "rectangle",
+          x = 804,
+          y = 378,
+          width = 0,
+          height = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          name = "enemy",
+          type = "",
+          shape = "rectangle",
+          x = 801,
+          y = 666,
+          width = 0,
+          height = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          name = "human",
+          type = "",
+          shape = "rectangle",
+          x = 424,
+          y = 218,
+          width = 0,
+          height = 0,
+          visible = true,
+          properties = {}
         }
       }
     }

@@ -42,5 +42,9 @@
   </object>
   <object name="human" x="662" y="333"/>
   <object name="spawn" x="771" y="781"/>
+  <object name="human" x="500" y="219"/>
+  <object name="enemy" x="804" y="378"/>
+  <object name="enemy" x="801" y="666"/>
+  <object name="human" x="424" y="218"/>
  </objectgroup>
 </map>
