@@ -254,7 +254,7 @@ class Human extends Entity
   ox: 7
   oy: 30
 
-  new: (x, y) =>
+  new: (x, y, @has_key=true) =>
     @move_center x, y
     @anim = @sprite\seq {"0,192,32,48"}, 0
     @effects = EffectList!
@@ -443,7 +443,7 @@ class World
               assert(o.properties.to, "door needs need to")
             @entities\add @door
           when "human"
-            @entities\add Human o.x, o.y
+            @entities\add Human o.x, o.y, o.properties.has_key
           when "enemy"
             @entities\add Enemy o.x, o.y
     }
@@ -472,7 +472,6 @@ class World
       @player\scare @
 
     if key == "p"
-      print "pausing"
       paused = not paused
 
     if key == "return"
@@ -556,7 +555,6 @@ _G.Game = class Game
     @money_this_round = 0
 
   prepare_player: (player, first_level) =>
-    print "is first level?", first_level
     if first_level
       player.hits = Player.hits + @upgrades.hit
       player.health = Player.health + @upgrades.hp
