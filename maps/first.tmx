@@ -34,6 +34,6 @@
     <property name="to" value="maps.second"/>
    </properties>
   </object>
-  <object name="human" x="280" y="152"/>
+  <object name="human" x="278" y="163"/>
  </objectgroup>
 </map>

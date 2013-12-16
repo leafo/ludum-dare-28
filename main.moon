@@ -249,10 +249,10 @@ class Human extends Entity
   is_scared: false
   has_key: true
 
-  h: 30
+  h: 20
 
   ox: 7
-  oy: 15
+  oy: 30
 
   new: (x, y) =>
     @move_center x, y
@@ -421,7 +421,7 @@ class Player extends Entity
     @hits > 0 and @health > 0
 
 class World
-  new: (@game, map="maps.first") =>
+  new: (@game, map="maps.first", @old_player) =>
     @viewport = EffectViewport scale: 3
     sx, sy = 0, 0
 
@@ -448,8 +448,7 @@ class World
             @entities\add Enemy o.x, o.y
     }
 
-
-    @player = Player!
+    @player = @old_player or Player!
     @player\move_center sx, sy
 
     @entities\add @player
@@ -465,8 +464,8 @@ class World
     @game\prepare_player @player
 
   mousepressed: (x,y) =>
-    x, y = @viewport\unproject x, y
-    @particles\add BooEmitter @, x,y
+    -- x, y = @viewport\unproject x, y
+    -- @particles\add BooEmitter @, x,y
 
   on_key: (key) =>
     if key == " "
@@ -495,7 +494,7 @@ class World
     @viewport\apply!
     @map\draw @viewport
 
-    @entities\draw!
+    @entities\draw_sorted!
     @hud\draw!
 
     @particles\draw!
