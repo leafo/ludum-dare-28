@@ -208,7 +208,6 @@ class MoneyEmitter extends Emitter
 
   new: (amount, world, ...) =>
     super world, ...
-    world.entities\add BooEmitter world, ...
     world.entities\add MoneyTextEmitter "+$#{amount}", world, ...
 
   count: 10
@@ -229,7 +228,8 @@ class ScareParticle extends Box
     super ...
 
   draw: =>
-    super {255,255, 0, 128}
+    if show_boxes
+      super {255,255, 0, 128}
 
   update: (dt, world) =>
     @life -= dt
@@ -257,9 +257,14 @@ class Human extends Entity
   new: (x, y) =>
     @move_center x, y
     @anim = @sprite\seq {"0,192,32,48"}, 0
+    @effects = EffectList!
 
   draw: =>
+    @effects\before!
+    COLOR\push 100,100,00 if @is_scared
     @anim\draw @x - @ox, @y - @oy
+    COLOR\pop! if @is_scared
+    @effects\after!
 
     if show_boxes
       if @is_scared
@@ -272,6 +277,7 @@ class Human extends Entity
     @is_scared = true
     center = Vec2d @center!
     amt = 10
+    @effects\add ShakeEffect 0.5
 
     world.entities\add MoneyEmitter amt, world, unpack center
     world.game\give_money amt
@@ -284,6 +290,7 @@ class Human extends Entity
       world.entities\add Key x, y, dir * 150 * rand(1, 1.3)
 
   update: (dt) =>
+    @effects\update dt
     true
 
 class Player extends Entity
@@ -320,8 +327,10 @@ class Player extends Entity
 
     @scare_cooloff = true
 
-    radius = ScareParticle @, @scale(2, 2, true)\unpack!
-    world.entities\add radius
+    radius = @scale(2, 2, true)
+    world.entities\add ScareParticle @, radius\unpack!
+    world.particles\add BooEmitter world, radius\center!
+
     sfx\play "scare"
     @hits -= 1
 
