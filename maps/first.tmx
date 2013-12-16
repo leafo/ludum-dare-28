@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="16" tileheight="16">
- <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16">
-  <image source="../images/tiles.png" width="256" height="512"/>
- </tileset>
+ <tileset firstgid="1" source="tiles.tsx"/>
  <layer name="ground" width="32" height="32">
   <data encoding="base64" compression="zlib">
    eJxjYBgFo2DkAlYSsCIQKwGxMgHMTSP7Q4HYCIiN8WApIJamof1OQOyMB2sBcQwN7Q8D4gg8OHrU/lH7R+0nGhBbpsEwte0npkxDxkE0sJ9QmYaMk2hgP6EwJQWP2j9qPyn2lwJxGRDPpBKuBuIaEuxvBeI2IF5JRdxDgv2jYBSMZAAA6Ip1iA==
@@ -34,6 +32,10 @@
     <property name="to" value="maps.second"/>
    </properties>
   </object>
-  <object name="human" x="278" y="163"/>
+  <object name="human" x="278" y="163">
+   <properties>
+    <property name="has_key" value="true"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

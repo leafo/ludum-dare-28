@@ -11,6 +11,7 @@ return {
     {
       name = "tiles",
       firstgid = 1,
+      filename = "tiles.tsx",
       tilewidth = 16,
       tileheight = 16,
       spacing = 0,
@@ -250,7 +251,9 @@ return {
           width = 0,
           height = 0,
           visible = true,
-          properties = {}
+          properties = {
+            ["has_key"] = "true"
+          }
         }
       }
     }

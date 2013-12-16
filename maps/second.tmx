@@ -1,23 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="20" height="20" tilewidth="16" tileheight="16">
- <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16">
-  <image source="../images/tiles.png" width="256" height="256"/>
- </tileset>
- <layer name="Tile Layer 1" width="20" height="20">
+<map version="1.0" orientation="orthogonal" width="40" height="40" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" source="tiles.tsx"/>
+ <layer name="ground" width="40" height="40">
   <data encoding="base64" compression="zlib">
-   eJzt1DsOACAIA1A+97+zuxGlUJ0cOvJSE9BFxH+osURQSzfJmhlrNiMXsTI9K54+8jpW5KHW6a2sbh1vt3esbtU9ZtwFcru2mGP8A+jc7QwytQNv
+   eJztmMlOwzAQhucGhQdgO7OfQQjOoArOQCt4DRYVriwC7mwPwPaS/JawNBpszyRxmlbtSN/NE3+JHc8kRKMXE2AStBhTYLpJKRYzYBbMMebBQpNSLA7BClhlrIHTJqVYOL8j0GGc0Oj4Vd3fdftV3d/er/vn1s3sV3V/cz9Pbr8q6zP2Gw6/svu7n35lrm/Jd2dYK4J2jvXDz42RZ5hjxzBP7PrrFL9nzrIh342RZ5jjoKTfduBeU2wZ8t2YDhV/D0N++4F7TdE25Lcz+qXg17fmyLxB8wu5DYpfzM3qdwbOwavCBbgUc/cMeSnewLvidwNuwZfCHbgXfg/g0ZAb4xv8KH7WqLuOVY2xX7UYVj9fZ3P+M1gES6TXfj6nVqdz/jPYAJuk130+p1anc/4z2AV7pNd9N6dfv1AfFVtrbS208M/iWCDnlH2S7KNSY1NrkctP9kmhHsmj9WRlvqk1vyK1XqPIWfQMXihcs2UPEPLrifG5/T7AJ/2v11qv5efyfYHvGXL7xSL1XDlX4JrC3/Z1+sWea4gnsveO1l4vd1h7x9y9XlPxC2wy/14=
   </data>
  </layer>
- <layer name="collide" width="20" height="20" opacity="0.46">
+ <layer name="shadows" width="40" height="40">
+  <data encoding="base64" compression="zlib">
+   eJztmA0KgzAMRnsAdTuAYG+wK+z+p1rLJoSaxvy01UEeBIS19s2U+mEIjqNjAnU35lRbqjXVM9Vyrc6B7Lcg13fB/Wz7u7efdX+P8LPc3/3cz4L7fZmC7hwb4QfPMOk5ht2//K9UceaX3pLnUI5dFRUY86k1JX4jkPo9Aq+Xr9+cN3N8raLAL8PpIbbPNHsB63cLPOfZcD8b7mfjH/16fjM4O+MpvwzMIj2AeacsLP9Q2alnJqV+pzISNVabRSG1TLBTe2di46n3rLb/3L5CZmTOWW9b95/KWrFYi7N2az9JLuJkx9jQTcMVWc858gHpLRkq
+  </data>
+ </layer>
+ <layer name="collide" width="40" height="40" opacity="0.44">
   <properties>
    <property name="hidden" value="true"/>
    <property name="solid" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYBgF1AYsRGJSzKJUDSnqkNXiU0+sWcTYT4rbiHEDNc2jxCxc5pED8PmVHLMGq3nEpLuhkH/Q9ZFbBuAyYzAAAMWOAQE=
+   eJztlsEKwCAMQz34/9+8+yYjaWpVzAMvY2ZvWGpbM4anD9ZOvH3sx3G7n1rfFX5Kvv20fPtp+fbT8pH9ox6GfqfKD3mG5rML2Z/lV4X9NBi/zDqL5qncPuep2E/Dfhon+s3sZZF+/JeX7ce+s6MfeobZd1l1bUf8ov+ZMaNHYetyhR9TSyfMmCtmPfPlAZ9OAzk=
   </data>
  </layer>
- <objectgroup name="objects" width="20" height="20">
-  <object name="spawn" x="136" y="168"/>
+ <layer name="decor" width="40" height="40">
+  <data encoding="base64" compression="zlib">
+   eJzt1rkOwjAUBVGnBP7/l9hrSICatWdtmDJNJEsPYVDmSNO8wrqlU5Kk75vTgpalh3TY0JZ2pYdI+lknOtOl9JAOD3rSK/jOmCY0pVnGPdegSmlIoyq2b0VrqqnJuEuSJP2r6P+rbU8HOkZHtXzy/3WlG92joyT13hvJFCPO
+  </data>
+ </layer>
+ <objectgroup name="objects" width="40" height="40">
+  <object name="enemy" x="438" y="560"/>
+  <object name="door" x="554" y="264">
+   <properties>
+    <property name="to" value="maps.third"/>
+   </properties>
+  </object>
+  <object name="human" x="134" y="165"/>
+  <object name="human" x="393" y="85"/>
+  <object name="spawn" x="119" y="521"/>
  </objectgroup>
 </map>

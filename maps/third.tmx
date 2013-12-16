@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="60" height="60" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" source="tiles.tsx"/>
+ <layer name="ground" width="60" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztmk1KBDEQhbP1CB5AQXA7MqhbRdwrit5A94oeQBkPMI4ewL9LWr0oCCH/XVNJ9dSDtwrTk2+SzkslY4xKpVKpVCqVqoV2wLvgrc69T8Q7Ax+Atzv2EfiYiPcEfAre69g34Fsi3gvwJfjK4+tGdvvBwdsLKwfvE3jVyA/gR0be4TdegN/APw38An51+rMuXpxT9vO58grzJtUfKl77HbKfz5FXdt6k+rNuXo68sr+vNa+vnWItD61HytueF/MKs8NlieVZKm965MW8wuxweWN55uaNBF5s97Wl+ufb3/TOewe+D7RNkTdnfEN7Com8qfE9NOE9hUTe1Piem/CeQiJvanxjNZ1E3tT4To13U8d3CX43eXX8B/hTOO8X+Nvk1fG/4D+hvMN8HlPbS+C16yBfvpZ4LoQXmX35WuIzQbwUZ7Wx89bWvEsP7xjm1PlyD7w5meOr/Ye6/znjs5hVPfDmZo6v9s89x8as4uS152ht3lD0k5MXmWvzZk7QT27ewbV5E8uZ0v5w8lKcsZbwunc2Ni/1fVkob2qYa3ndOxt8L8bMk5BKapxS2zkTk3tnQ/FehFRS45TazpmYYv8xoObtQZvGG1tDpsobW0Ny1wEpSq0hueuASqVSqVQqXv0DtvQMRg==
+  </data>
+ </layer>
+ <layer name="shadows" width="60" height="60">
+  <data encoding="base64" compression="zlib">
+   eJzt2EEKwzAMRNFcIL3/cZt1wUTGElaa98Erh5n5Wfo4AAAAAGCd8zqf3SMGVGx7s28H9+o9fPfC91n5s+z2rfwHd318cztnfX/vZvfx5ct3Db73m0Z3fOPd0T2rZPrOfsOXbyffzO7onsxOvnyruqN7Mjv58q3qju7J7FzJ75ZTnd8tpzq/W051frec6vxuOZH8Dpl8/5s3+I68+D6f1fcTAAAA5PMFUOkVhQ==
+  </data>
+ </layer>
+ <layer name="collide" width="60" height="60" opacity="0.44">
+  <properties>
+   <property name="hidden" value="true"/>
+   <property name="solid" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztlsEOhSAMBD34/9/sXQ1Q2rUFZxIOxLzdToI8jwMAAAAAABScC6xo38rgG5uXfXbf5olEnW8F37Xyvf1f+2a/rxm+SvDV9lv7et8+0ee3gm9rlt58+Nr2XvAd3+P7T9/Wnbybb68DX9veC77j+5FvqZ3e3xX6svvx1fZF9HuXp9/L133Z/fg+97PnVHG+vUTlV8tR51fLUedXy7HkK/5nPPNEorp/8Z37ncJXtWZnuD/bjZYTvuvzR9+IewAAAABAxQUEuwbd
+  </data>
+ </layer>
+ <layer name="decor" width="60" height="60">
+  <data encoding="base64" compression="zlib">
+   eJzt1jkOwkAURMFxaLj/Fb1ADl4S9xGI5mOpSnp5h90aAAAAAAAA/2xNr/SuHtLJno50Vg/pZBxae6TnUL0EAO5rSnNaqod08knftFUPAQDgZz4rAABVLkpPEQI=
+  </data>
+ </layer>
+ <objectgroup name="objects" width="60" height="60">
+  <object name="door" x="537" y="471">
+   <properties>
+    <property name="to" value="finish"/>
+   </properties>
+  </object>
+  <object name="enemy" x="661" y="437"/>
+  <object name="enemy" x="329" y="569"/>
+  <object name="enemy" x="777" y="482"/>
+  <object name="enemy" x="216" y="229"/>
+  <object name="human" x="335" y="335">
+   <properties>
+    <property name="has_key" value="true"/>
+   </properties>
+  </object>
+  <object name="human" x="662" y="333"/>
+  <object name="spawn" x="771" y="781"/>
+ </objectgroup>
+</map>
