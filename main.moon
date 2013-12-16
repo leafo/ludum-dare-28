@@ -174,6 +174,24 @@ class FadeAway
     else
       true
 
+class BooParticle extends ImageParticle
+  lazy sprite: -> Spriter "images/tiles.png", 16, 16
+  w: 39
+  h: 33
+  quad: "38,214,39,33"
+
+class BooEmitter extends Emitter
+  count: 3
+  speed: 100
+
+  make_particle: (...) =>
+    with BooParticle ...
+      .vel = Vec2d(0,-1)\random_heading(60) * @speed
+      .scale = 0.5
+      .accel = Vec2d 0, @speed*2
+      .dspin = rand -2,2
+      .dscale = rand 1, 1.2
+
 class MoneyEmitter extends Emitter
   class MoneyP extends PixelParticle
     size: 4
@@ -190,6 +208,7 @@ class MoneyEmitter extends Emitter
 
   new: (amount, world, ...) =>
     super world, ...
+    world.entities\add BooEmitter world, ...
     world.entities\add MoneyTextEmitter "+$#{amount}", world, ...
 
   count: 10
@@ -437,8 +456,8 @@ class World
     @game\prepare_player @player
 
   mousepressed: (x,y) =>
-    print @viewport\unproject x, y
-
+    x, y = @viewport\unproject x, y
+    @particles\add BooEmitter @, x,y
 
   on_key: (key) =>
     if key == " "
@@ -575,6 +594,7 @@ love.load = ->
   }
 
   export dispatcher = Dispatcher Title!
+  export dispatcher = Dispatcher Game!
   dispatcher.default_transition = FadeTransition
   dispatcher\bind love
 
