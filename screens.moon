@@ -64,7 +64,32 @@ class BeginNight extends BaseScreen
 join = (strs) ->
   table.concat strs, "\n"
 
-class Tutorial extends BaseScreen
+
+class TextScreen extends BaseScreen
+  dialog: {}
+
+  new: =>
+    super!
+
+    add_str = (str, callback) ->
+      with l = RevealLabel str, 10,10, callback
+        @entities\add l
+
+    @entities\add Sequence ->
+      for msg in *@dialog
+        label = await add_str, msg
+        wait_for_key "return"
+        label.alive = false
+
+      @next_screen!
+
+
+  on_key: (key) =>
+    if key == "escape"
+      @next_screen!
+      return true
+
+class Tutorial extends TextScreen
   dialog: {
     join {
       "Greetings fellow ghost!"
@@ -109,29 +134,12 @@ class Tutorial extends BaseScreen
 
   }
 
-  new: =>
-    super!
-
-    add_str = (str, callback) ->
-      with l = RevealLabel str, 10,10, callback
-        @entities\add l
-
-    @entities\add Sequence ->
-      for msg in *@dialog
-        label = await add_str, msg
-        wait_for_key "return"
-        label.alive = false
-
-      @start_game!
-
-  start_game: =>
+  next_screen: =>
     dispatcher\push Game\new_game_state!
 
-  on_key: (key) =>
-    if key == "escape"
-      @start_game!
-      return true
-
+class WinGame extends TextScreen
+  next_screen: =>
+    error "what now?"
 
 {:Title}
 
