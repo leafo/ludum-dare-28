@@ -461,7 +461,7 @@ class World
       sfx\play_music "ghost"
 
     @game\on_new_round!
-    @game\prepare_player @player
+    @game\prepare_player @player, not @old_player
 
   mousepressed: (x,y) =>
     -- x, y = @viewport\unproject x, y
@@ -487,7 +487,7 @@ class World
     if key
       table.remove @game.inventory, i
       sfx\play "start_game"
-      dispatcher\replace World @game, door.to
+      dispatcher\replace World @game, door.to, @player
 
   draw: =>
     @viewport\center_on @player if @player.alive
@@ -555,9 +555,11 @@ _G.Game = class Game
     @inventory = {}
     @money_this_round = 0
 
-  prepare_player: (player) =>
-    player.hits = Player.hits + @upgrades.hit
-    player.health = Player.health + @upgrades.hp
+  prepare_player: (player, first_level) =>
+    print "is first level?", first_level
+    if first_level
+      player.hits = Player.hits + @upgrades.hit
+      player.health = Player.health + @upgrades.hp
 
   give_money: (amt) =>
     @money_this_round += amt
