@@ -138,8 +138,28 @@ class Tutorial extends TextScreen
     dispatcher\push Game\new_game_state!
 
 class WinGame extends TextScreen
-  next_screen: =>
-    error "what now?"
+  dialog: {
+    join {
+      "Congratulations!"
+      "You beat the game"
+      ""
+      "Press Enter..."
+    }
 
-{:Title}
+    join {
+      "I ran out of time"
+      "so this is all you"
+      "get!"
+      ""
+      "Thanks for playing"
+      ""
+      "Press Enter"
+    }
+
+  }
+
+  next_screen: =>
+    dispatcher\replace Title!
+
+{:Title, :WinGame}
 
