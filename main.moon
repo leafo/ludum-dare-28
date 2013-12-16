@@ -500,7 +500,7 @@ class World
     @particles\draw!
     @viewport\pop!
 
-    g.print love.timer.getFPS!, 10, 10
+    -- g.print love.timer.getFPS!, 10, 10
 
   update: (dt) =>
     return if paused
