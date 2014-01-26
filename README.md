@@ -43,7 +43,7 @@ you only have one
 
 ### Powered by:
 
- * <https://love2d.org/> 0.8.0
+ * <https://love2d.org/> 0.9.0
  * <https://moonscript.org/>
  * [LoveKit](https://github.com/leafo/lovekit)
 
