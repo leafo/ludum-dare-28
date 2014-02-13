@@ -5,7 +5,7 @@ import Label, AnimatedLabel, VList, ez_approach from require "ui"
 
 class Upgrade
   new: (@game) =>
-    @viewport = Viewport scale: 2
+    @viewport = Viewport VIEWPORT_OPTS
     @entities = DrawList!
     @seqs = DrawList!
 

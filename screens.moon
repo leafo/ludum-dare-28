@@ -10,7 +10,7 @@ class Title
   new: =>
     @bg = imgfy "images/title.png"
     @ghost = imgfy "images/title_ghost.png"
-    @viewport = Viewport scale: 3
+    @viewport = Viewport VIEWPORT_OPTS
 
     @entities = DrawList!
 
@@ -45,7 +45,7 @@ class Title
 
 class BaseScreen
   new: =>
-    @viewport = Viewport scale: 3
+    @viewport = Viewport VIEWPORT_OPTS
     @entities = DrawList!
 
   update: (dt) =>

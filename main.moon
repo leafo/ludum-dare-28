@@ -2,6 +2,12 @@
 require "lovekit.all"
 -- require "lovekit.reloader"
 
+export VIEWPORT_OPTS = {
+  w: 214
+  h: 134
+  margin: 0
+}
+
 {graphics: g, :keyboard} = love
 
 import Upgrade from require "upgrade"
@@ -412,7 +418,7 @@ class Player extends Entity
 
 class World
   new: (@game, map="maps.first", @old_player) =>
-    @viewport = EffectViewport scale: 3
+    @viewport = EffectViewport VIEWPORT_OPTS
     sx, sy = 0, 0
 
     @entities = DrawList!
