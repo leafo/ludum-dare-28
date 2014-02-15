@@ -311,6 +311,11 @@ class Player extends Entity
     @accel = Vec2d 0, 0
     super x,y
 
+    @mover = if love.joystick.getJoystickCount! > 0
+      make_joystick_mover!
+    else
+      movement_vector!
+
     with @sprite
       @anim = StateAnim "right", {
         left: \seq {0,1,2,3,4,5}, 0.3
@@ -367,7 +372,7 @@ class Player extends Entity
     @anim\update dt
     @seqs\update dt
     decel = @speed * 10 * dt
-    @accel = movement_vector! * @speed
+    @accel = @.mover! * @speed
 
     if @stunned
       decel *= 4
