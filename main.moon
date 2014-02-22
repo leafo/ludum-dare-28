@@ -16,6 +16,7 @@ import Enemy from require "enemy"
 import Title, WinGame from require "screens"
 import FadeAway from require "misc"
 
+
 paused = false
 export show_boxes = false
 
@@ -311,11 +312,6 @@ class Player extends Entity
     @accel = Vec2d 0, 0
     super x,y
 
-    @mover = if love.joystick.getJoystickCount! > 0
-      make_joystick_mover!
-    else
-      movement_vector!
-
     with @sprite
       @anim = StateAnim "right", {
         left: \seq {0,1,2,3,4,5}, 0.3
@@ -372,7 +368,7 @@ class Player extends Entity
     @anim\update dt
     @seqs\update dt
     decel = @speed * 10 * dt
-    @accel = @.mover! * @speed
+    @accel = controller\movement_vector! * @speed
 
     if @stunned
       decel *= 4
@@ -478,17 +474,18 @@ class World
     -- @particles\add BooEmitter @, x,y
 
   on_key: (key) =>
-    if key == " " or key == "x"
+    if controller\is_down "scare"
       @player\scare @
 
-    if key == "p"
-      paused = not paused
-
-    if key == "return" or key == "c"
+    if controller\is_down "open"
       if @door and @door.touching > 0 and @try_enter_door!
         return
 
       sfx\play "buzz"
+
+
+    if controller\is_down "pause"
+      paused = not paused
 
   try_enter_door: (door=@door)=>
     key, i = door\can_enter @game
@@ -602,7 +599,7 @@ love.load = ->
   g.setBackgroundColor 17,18, 15
 
 
-  export sfx = lovekit.audio.Audio "sounds"
+  export sfx = Audio "sounds"
   -- sfx.play_music = ->
   sfx\preload {
     "start_game"
@@ -614,6 +611,24 @@ love.load = ->
     "steal"
     "buy"
   }
+
+  export controller = Controller {
+    left: "left"
+    right: "right"
+    up: "up"
+    down: "down"
+
+    confirm: { "x",  "return"}
+    cancel: { "c", "escape" }
+    scare: { "x", " " }
+    open: { "c", "return" }
+    pause: "p"
+
+    upgrade_one: {"1"}
+    upgrade_two: {"1"}
+  }, "auto"
+
+  sfx.play_music = =>
 
   export dispatcher = Dispatcher Title!
   dispatcher.default_transition = FadeTransition

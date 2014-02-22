@@ -48,6 +48,10 @@ class Upgrade
     @display_money = ez_approach @display_money, @game.money, dt
 
   on_key: (key) =>
+    if controller\is_down "confirm"
+      sfx\play "start_game"
+      dispatcher\pop!
+
     try_upgrade = (name) ->
       price =  @game\upgrade_price name
 
@@ -59,14 +63,11 @@ class Upgrade
         @money_label.effects\add ShakeEffect 0.5
         sfx\play "buzz"
 
-    switch key
-      when "return"
-        sfx\play "start_game"
-        dispatcher\pop!
-      when "1" -- buy hit
-        try_upgrade "hit"
-      when "2" -- buy hp
-        try_upgrade "hp"
+    if controller\is_down "upgrade_one"
+      try_upgrade "hit"
+
+    if controller\is_down "upgrade_two"
+      try_upgrade "hp"
 
   draw: =>
     @viewport\apply!

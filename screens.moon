@@ -23,7 +23,7 @@ class Title
     sfx\play_music "ghost_title"
 
   on_key: (key) =>
-    if key == "return"
+    if controller\is_down "confirm"
       sfx\play "start_game"
       dispatcher\push Tutorial!
 
@@ -85,7 +85,7 @@ class TextScreen extends BaseScreen
 
 
   on_key: (key) =>
-    if key == "escape"
+    if controller\is_down "cancel"
       @next_screen!
       return true
 
