@@ -47,7 +47,7 @@ class Upgrade
     @entities\update dt, @
     @display_money = ez_approach @display_money, @game.money, dt
 
-  on_key: (key) =>
+  on_input: (key) =>
     if controller\is_down "confirm"
       sfx\play "start_game"
       dispatcher\pop!

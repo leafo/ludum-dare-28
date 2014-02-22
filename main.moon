@@ -473,7 +473,7 @@ class World
     -- x, y = @viewport\unproject x, y
     -- @particles\add BooEmitter @, x,y
 
-  on_key: (key) =>
+  on_input: =>
     if controller\is_down "scare"
       @player\scare @
 
@@ -618,14 +618,15 @@ love.load = ->
     up: "up"
     down: "down"
 
-    confirm: { "x",  "return"}
-    cancel: { "c", "escape" }
-    scare: { "x", " " }
-    open: { "c", "return" }
-    pause: "p"
+    confirm: { "x",  "return", joystick: 1}
+    cancel: { "c", "escape", joystick: 2 }
+    scare: { "x", " ", joystick: 1 }
 
-    upgrade_one: {"1"}
-    upgrade_two: {"1"}
+    open: { "c", "return", joystick: 2 }
+    pause: { "p", joystick: 8 }
+
+    upgrade_one: {"1", joystick: 5}
+    upgrade_two: {"1", joystick: 6}
   }, "auto"
 
   sfx.play_music = =>
@@ -633,5 +634,4 @@ love.load = ->
   export dispatcher = Dispatcher Title!
   dispatcher.default_transition = FadeTransition
   dispatcher\bind love
-
 
